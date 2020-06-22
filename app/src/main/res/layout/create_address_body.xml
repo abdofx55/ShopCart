@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/profile_txt_name"
+        style="@style/Label"
+        android:text="@string/address_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/profile_edit_name"
+        style="@style/EditText"
+        android:inputType="textEmailAddress"
+        android:text="@string/sign_edit_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_txt_name" />
+
+
+    <TextView
+        android:id="@+id/profile_txt_address"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/address_body_txt_margin_top"
+        android:text="@string/address_street"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_name" />
+
+
+    <EditText
+        android:id="@+id/profile_edit_address"
+        style="@style/EditText"
+        android:inputType="text"
+        android:text="Shewrapara 958"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_txt_address" />
+
+
+    <TextView
+        android:id="@+id/profile_txt_city"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/address_body_txt_margin_top"
+        android:text="@string/address_city"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_address" />
+
+    <EditText
+        android:id="@+id/profile_edit_city"
+        style="@style/EditText"
+        android:inputType="text"
+        android:text="Cairo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_txt_city" />
+
+
+    <TextView
+        android:id="@+id/profile_txt_email"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/address_body_txt_margin_top"
+        android:text="@string/address_postal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_city" />
+
+    <EditText
+        android:id="@+id/profile_edit_email"
+        style="@style/EditText"
+        android:inputType="number"
+        android:text="123456"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_txt_email" />
+
+
+    <TextView
+        android:id="@+id/profile_txt_mobile"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/address_body_txt_margin_top"
+        android:text="@string/address_phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email" />
+
+    <EditText
+        android:id="@+id/profile_edit_mobile"
+        style="@style/EditText"
+        android:inputType="phone"
+        android:text="012345678910"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_txt_mobile" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

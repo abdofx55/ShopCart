@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/login_txt_email"
+            style="@style/Label"
+            android:text="@string/login_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/login_edit_email"
+            style="@style/EditText"
+            android:inputType="textEmailAddress"
+            android:text="@string/login_edit_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_txt_email" />
+
+        <TextView
+            android:id="@+id/login_txt_password"
+            style="@style/Label"
+            android:layout_marginTop="@dimen/login_body_txt_margin_top"
+            android:text="@string/login_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_edit_email" />
+
+        <EditText
+            android:id="@+id/login_edit_password"
+            style="@style/EditText"
+            android:inputType="textPassword"
+            android:text="@string/login_edit_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_txt_password" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

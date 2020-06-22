@@ -1,0 +1,171 @@
+<resources>
+    <string name="app_name">Shop cart</string>
+    <string name="no_internet">No Internet Connection</string>
+
+
+    <!--    splash_screen   -->
+    <string name="splash_name">@string/app_name</string>
+    <string name="splash_footer">Copyrights © 2020 . All copyrights reserved</string>
+
+
+    <!-- _______________________________________________________________________________________ -->
+
+
+    <!--    activity_first_screen   -->
+
+    <!--    Fragment_welcome  -->
+    <string name="first_welcome">Welcome to</string>
+    <string name="first_name">@string/splash_name</string>
+    <string name="first_explore">Explore Us</string>
+    <string name="first_login">Log in</string>
+    <string name="first_sign">Sign up</string>
+
+
+    <!--    Fragment_login  -->
+    <string name="login_title">Login</string>
+    <string name="login_email">Email</string>
+    <string name="login_edit_email">AHamdy2508@yahoo.com</string>
+    <string name="login_password">Password</string>
+    <string name="login_edit_password">AbdelRhman</string>
+    <string name="login_login">@string/first_login</string>
+    <string name="login_logging">Logging</string>
+    <string name="login_dont">Don’t have an account ?</string>
+    <string name="login_sign">@string/first_sign</string>
+    <string name="login_toast_login_success">login succeed</string>
+    <string name="login_toast_please_verify">Please verify your email address</string>
+
+
+    <!--    Fragment_sign_up  -->
+    <string name="sign_title">Sign up</string>
+    <string name="sign_name">Name</string>
+    <string name="sign_edit_name">AbdelRhman Hamdy</string>
+    <string name="sign_email">@string/login_email</string>
+    <string name="sign_edit_email">@string/login_edit_email</string>
+    <string name="sign_password">@string/login_password</string>
+    <string name="sign_edit_password">@string/login_edit_password</string>
+    <string name="sign_sign">@string/first_sign</string>
+    <string name="sign_signing">Signing</string>
+    <string name="sign_dont">Already have an account ?</string>
+    <string name="sign_login">Sign in</string>
+    <string name="sign_forgot">Forgot Password ?</string>
+    <string name="sign_toast_sign_success">You have successfully created a new account , check your email to verify your account then login</string>
+
+
+    <!--    Fragment_forgot  -->
+    <string name="forgot_title">Forgot Password</string>
+    <string name="forgot_email">@string/login_email</string>
+    <string name="forgot_edit_email">@string/login_edit_email</string>
+    <string name="forgot_forgot">Send reset email</string>
+    <string name="forgot_resetting">Sending</string>
+    <string name="forgot_toast_reset_success">Reset email has sent successfully</string>
+
+
+    <!-- _______________________________________________________________________________________ -->
+
+    <!--    activity_on_boarding  -->
+    <string name="onboarding_title_1">FAST SHIPPING</string>
+    <string name="onboarding_text_1">We start our work with shipping once you place your order.</string>
+
+    <string name="onboarding_title_2">FREE RETURNS</string>
+    <string name="onboarding_text_2">We are responsible for our own errors if any occurred.</string>
+
+    <string name="onboarding_title_3">CUSTOMER SUPPORT</string>
+    <string name="onboarding_text_3">Whenever you have any query, you’ll find us providing you with all the information you need.</string>
+
+    <string name="onboarding_title_4">PAYMENT OPTIONS</string>
+    <string name="onboarding_text_4">We accept various payment methods to facilitate our customers.</string>
+
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_finish">Finish</string>
+
+
+    <!-- _______________________________________________________________________________________ -->
+
+
+    <!--    activity_main  -->
+
+    <!--    fragment_home  -->
+    <string name="home_search">Search Your Product</string>
+    <string name="home_categories">Categories</string>
+    <string name="home_featured">Featured</string>
+    <string name="home_best">Best Sell</string>
+    <string name="home_more">see all</string>
+
+    <!--    fragment_featured  -->
+    <string name="featured_title">@string/home_featured</string>
+
+    <!--    fragment_best_sell  -->
+    <string name="best_title">@string/home_best</string>
+
+    <!--    fragment_favourite  -->
+    <string name="favourite_txt_title">Favorite</string>
+
+
+    <!--    fragment_menu  -->
+    <string name="menu_home">Home</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_cart">My Cart</string>
+    <string name="menu_favourite">Favourite</string>
+    <string name="menu_orders">My Orders</string>
+    <string name="menu_language">Language</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_sign_out">Sign Out</string>
+
+
+    <!--    fragment_create_address  -->
+    <string name="address_title">Create Address</string>
+    <string name="address_name">@string/sign_name</string>
+    <string name="address_street">Address</string>
+    <string name="address_city">City</string>
+    <string name="address_postal">Postal Code</string>
+    <string name="address_phone">Mobile Number</string>
+    <string name="address_add">Add Address</string>
+
+    <!--    fragment_profile  -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_name">@string/address_name</string>
+    <string name="profile_street">@string/address_street</string>
+    <string name="profile_city">@string/address_city</string>
+    <string name="profile_gender">Gender</string>
+    <string name="profile_email">@string/login_email</string>
+    <string name="profile_phone">@string/address_phone</string>
+    <string name="profile_save">Save</string>
+
+
+    <!--    fragment_confirmation  -->
+    <string name="confirmation_title">Confirmation</string>
+    <string name="confirmation_body">You have successfully\ncompleted your payment procedure</string>
+    <string name="confirmation_button">Back to Home</string>
+
+    <!--    fragment_payment  -->
+    <string name="payment_txt_title">Payment</string>
+    <string name="payment_txt_subtotal">Subtotal</string>
+    <string name="payment_txt_discount">Discount</string>
+    <string name="payment_txt_shipping">Shipping</string>
+    <string name="payment_txt_Total">Total</string>
+    <string name="payment_btn_add_card">Add Card</string>
+    <string name="payment_btn_checkout">Checkout</string>
+
+    <!--    fragment_cart  -->
+    <string name="cart_txt_title">Cart</string>
+
+    <!--    fragment_address  -->
+    <string name="address_txt_title">Address</string>
+
+    <!--    fragment_my_orders  -->
+    <string name="orders_txt_title">My Orders</string>
+
+    <!--    fragment_checkout  -->
+    <string name="checkout_txt_title">Checkout</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_on_boarding">OnBoardingActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- _______________________________________________________________________________________ -->
+
+
+</resources>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activities.MainActivity.CreateAddressFragment">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/address_img_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/back_button_margin_left_1"
+            android:layout_marginLeft="@dimen/back_button_margin_left_1"
+            android:layout_marginTop="@dimen/back_button_margin_top"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingTop="19dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="19dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back_button_dark" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/address_img_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/address_img_back"
+            app:layout_constraintEnd_toStartOf="@+id/address_img_cart"
+            app:layout_constraintTop_toBottomOf="@+id/address_img_back"
+            app:srcCompat="@drawable/ic_search_dark" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/address_img_cart"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/address_img_search"
+            app:layout_constraintEnd_toStartOf="@+id/address_guideline_end"
+            app:layout_constraintTop_toBottomOf="@+id/address_img_search"
+            app:srcCompat="@drawable/ic_shopping_cart" />
+
+
+
+        <TextView
+            android:id="@+id/address_txt_title"
+            style="@style/title"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/address_title"
+            app:layout_constraintStart_toStartOf="@+id/address_guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/address_img_back" />
+
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/address_body_margin_top"
+            app:layout_constraintEnd_toStartOf="@+id/address_guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/address_guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/address_txt_title">
+
+            <include
+                layout="@layout/create_address_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </ScrollView>
+
+
+        <Button
+            android:id="@+id/address_btn_add_address"
+            style="@style/third_button"
+            android:text="@string/address_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/address_guideline_end"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/address_guideline_start" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/address_guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/guideline_margin_1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/address_guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/guideline_margin_1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

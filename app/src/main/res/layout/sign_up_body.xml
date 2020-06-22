@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sign_txt_name"
+            style="@style/Label"
+            android:text="@string/sign_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/sign_edit_name"
+            style="@style/EditText"
+            android:inputType="text"
+            android:text="@string/sign_edit_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_txt_name" />
+
+        <TextView
+            android:id="@+id/sign_txt_email"
+            style="@style/Label"
+            android:layout_marginTop="@dimen/login_body_txt_margin_top"
+            android:text="@string/sign_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_edit_name" />
+
+        <EditText
+            android:id="@+id/sign_edit_email"
+            style="@style/EditText"
+            android:inputType="textEmailAddress"
+            android:text="@string/sign_edit_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_txt_email" />
+
+        <TextView
+            android:id="@+id/sign_txt_password"
+            style="@style/Label"
+            android:layout_marginTop="@dimen/login_body_txt_margin_top"
+            android:text="@string/sign_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_edit_email" />
+
+        <EditText
+            android:id="@+id/sign_edit_password"
+            style="@style/EditText"
+            android:inputType="textPassword"
+            android:text="@string/sign_edit_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_txt_password" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

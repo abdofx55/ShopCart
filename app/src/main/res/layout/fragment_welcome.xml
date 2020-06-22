@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        tools:context=".Activities.FirstScreenActivity.FirstScreenActivity">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/first_img_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/first_btn_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/first_txt_explore"
+            app:layout_constraintVertical_bias="0.591"
+            app:srcCompat="@drawable/ic_first_screen_image" />
+
+        <TextView
+            android:id="@+id/first_txt_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="110dp"
+            android:fontFamily="@font/segoeui"
+            android:text="@string/first_welcome"
+            android:textColor="@color/primaryText"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/first_txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/segoeui_semibold"
+            android:text="@string/first_name"
+            android:textColor="@color/primaryText"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/first_txt_welcome"
+            app:layout_constraintStart_toEndOf="@+id/first_txt_welcome" />
+
+        <TextView
+            android:id="@+id/first_txt_explore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/segoeui"
+            android:text="@string/first_explore"
+            android:textColor="@color/primaryText"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/first_txt_welcome" />
+
+        <Button
+            android:id="@+id/first_btn_login"
+            style="@style/first_button"
+            android:layout_marginBottom="8dp"
+            android:text="@string/first_login"
+            app:layout_constraintBottom_toTopOf="@+id/first_btn_sign"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/first_btn_sign"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:fontFamily="@font/segoeui"
+            android:text="@string/first_sign"
+            android:textAllCaps="false"
+            android:textColor="@color/primaryText"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

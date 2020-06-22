@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        tools:context=".Activities.MainActivity.MenuFragment">
+
+        <Button
+            android:id="@+id/menu_btn_home"
+            style="@style/menu_button"
+            android:text="@string/menu_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <Button
+            android:id="@+id/menu_btn_profile"
+            style="@style/menu_button"
+            android:text="@string/menu_profile"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_home"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_home"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_home" />
+
+        <Button
+            android:id="@+id/menu_btn_cart"
+            style="@style/menu_button"
+            android:text="@string/menu_cart"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_profile"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_profile"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_profile" />
+
+        <Button
+            android:id="@+id/menu_btn_favourite"
+            style="@style/menu_button"
+            android:text="@string/menu_favourite"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_cart"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_cart"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_cart" />
+
+        <Button
+            android:id="@+id/menu_btn_orders"
+            style="@style/menu_button"
+            android:text="@string/menu_orders"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_favourite"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_favourite"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_favourite" />
+
+        <Button
+            android:id="@+id/menu_btn_language"
+            style="@style/menu_button"
+            android:text="@string/menu_language"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_orders"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_orders"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_orders" />
+
+        <Button
+            android:id="@+id/menu_btn_settings"
+            style="@style/menu_button"
+            android:text="@string/menu_settings"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_language"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_language"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_language" />
+
+        <Button
+            android:id="@+id/menu_btn_sign_out"
+            style="@style/menu_button"
+            android:text="@string/menu_sign_out"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn_settings"
+            app:layout_constraintStart_toEndOf="@+id/menu_btn_settings"
+            app:layout_constraintTop_toBottomOf="@+id/menu_btn_settings" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/menu_img_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginRight="52dp"
+            android:layout_marginBottom="52dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_menu_close" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
