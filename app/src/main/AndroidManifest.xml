@@ -15,7 +15,6 @@
         <activity android:name=".Activities.FirstScreenActivity.FirstScreenActivity"
             android:launchMode="singleTask"/>
         <activity android:name=".Activities.OnBoardingActivity.OnBoardingActivity" />
-        <activity android:name=".Activities.SplashScreen" />
         <activity
             android:name=".Activities.MainActivity.MainActivity"
             android:launchMode="singleTask">

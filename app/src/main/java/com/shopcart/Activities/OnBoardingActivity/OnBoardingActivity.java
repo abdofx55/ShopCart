@@ -1,21 +1,20 @@
 package com.shopcart.Activities.OnBoardingActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
-import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.databinding.DataBindingUtil;
+import androidx.preference.PreferenceManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.shopcart.Activities.FirstScreenActivity.FirstScreenActivity;
-import com.shopcart.Activities.SplashScreen;
+import com.shopcart.Activities.MainActivity.SplashScreenFragment;
 import com.shopcart.R;
 import com.shopcart.databinding.ActivityOnBoardingBinding;
 
@@ -96,6 +95,6 @@ public class OnBoardingActivity extends AppCompatActivity implements View.OnClic
     private void registerOnBoardingState() {
         // register that user has seen OnBoardingActivity activity
         PreferenceManager.getDefaultSharedPreferences(OnBoardingActivity.this).edit()
-                .putBoolean(SplashScreen.ON_BOARDING_STATE_KEY, true).apply();
+                .putBoolean(SplashScreenFragment.ON_BOARDING_STATE_KEY, true).apply();
     }
 }
