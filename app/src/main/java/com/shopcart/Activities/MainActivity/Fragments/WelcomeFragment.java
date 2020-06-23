@@ -1,4 +1,4 @@
-package com.shopcart.Activities.FirstScreenActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.shopcart.R;
 import com.shopcart.databinding.FragmentWelcomeBinding;
@@ -35,7 +39,7 @@ public class WelcomeFragment extends Fragment implements View.OnClickListener {
         binding.firstBtnLogin.setOnClickListener(this);
         binding.firstBtnSign.setOnClickListener(this);
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getChildFragmentManager();
 
         return binding.getRoot();
     }
@@ -43,13 +47,18 @@ public class WelcomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.equals(binding.firstBtnLogin)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.first_frame_fragment_container, new LoginFragment()).addToBackStack(null)
-                    .commit();
+            NavDirections action = WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.welcomeFragment)
+                navController.navigate(action);
+
         } else if (v.equals(binding.firstBtnSign)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.first_frame_fragment_container, new SignUpFragment()).addToBackStack(null)
-                    .commit();
+            NavDirections action = WelcomeFragmentDirections.actionWelcomeFragmentToSignUpFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.welcomeFragment)
+                navController.navigate(action);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.shopcart.Activities.FirstScreenActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;
@@ -12,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.shopcart.R;
-import com.shopcart.Utilities.NetworkUtils;
 import com.shopcart.User;
+import com.shopcart.Utilities.NetworkUtils;
 import com.shopcart.databinding.FragmentSignUpBinding;
 
 import es.dmoral.toasty.Toasty;
@@ -55,7 +59,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             activity = getActivity();
         }
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getChildFragmentManager();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -87,9 +91,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         // Sign In Button
         else if (v.equals(binding.signBtnLogin)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.first_frame_fragment_container, new LoginFragment())
-                    .commit();
+            NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.signUpFragment)
+                navController.navigate(action);
 
         }
 
@@ -157,9 +163,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         public void onSuccess(Void aVoid) {
                             if (isAdded()) {
                                 Toasty.success(activity, getString(R.string.sign_toast_sign_success), Toast.LENGTH_LONG, true).show();
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.first_frame_fragment_container, new LoginFragment())
-                                        .commit();
+                                NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
+                                NavController navController = NavHostFragment.findNavController(SignUpFragment.this);
+                                NavDestination navDestination = navController.getCurrentDestination();
+                                if (navDestination != null && navDestination.getId() == R.id.signUpFragment)
+                                    navController.navigate(action);
+
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {

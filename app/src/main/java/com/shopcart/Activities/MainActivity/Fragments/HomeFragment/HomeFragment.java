@@ -1,4 +1,4 @@
-package com.shopcart.Activities.MainActivity.HomeFragment;
+package com.shopcart.Activities.MainActivity.Fragments.HomeFragment;
 
 
 import android.app.Activity;
@@ -12,12 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.FragmentNavigator.Destination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,9 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.shopcart.Activities.MainActivity.BestSellFragment;
-import com.shopcart.Activities.MainActivity.FeaturedFragment;
-import com.shopcart.Activities.MainActivity.MenuFragment;
 import com.shopcart.DataRepository;
 import com.shopcart.R;
 import com.shopcart.User;
@@ -93,6 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         binding.homeRecyclerCategories.setLayoutManager(categoriesLayoutManager);
 
         binding.homeImgMenu.setOnClickListener(this);
+        binding.homeImgCart.setOnClickListener(this);
         binding.homeTxtFeaturedMore.setOnClickListener(this);
         binding.homeTxtBestMore.setOnClickListener(this);
 
@@ -167,13 +162,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 navController.navigate(action);
 
         }else if (binding.homeTxtFeaturedMore.equals(v)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_frame_fragment_container, new FeaturedFragment()).addToBackStack(null)
-                    .commit();
+            NavDirections action = HomeFragmentDirections.actionHomeFragmentToFeaturedFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
+                navController.navigate(action);
+
         } else if (binding.homeTxtBestMore.equals(v)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_frame_fragment_container, new BestSellFragment()).addToBackStack(null)
-                    .commit();
+            NavDirections action = HomeFragmentDirections.actionHomeFragmentToBestSellFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
+                navController.navigate(action);
+
+        } else if (binding.homeImgCart.equals(v)) {
+            NavDirections action = HomeFragmentDirections.actionHomeFragmentToCartFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
+                navController.navigate(action);
+
         }
     }
 

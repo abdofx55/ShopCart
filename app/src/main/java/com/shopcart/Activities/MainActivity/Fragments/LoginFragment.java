@@ -1,8 +1,7 @@
-package com.shopcart.Activities.FirstScreenActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,13 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.shopcart.Activities.MainActivity.MainActivity;
 import com.shopcart.R;
 import com.shopcart.Utilities.NetworkUtils;
 import com.shopcart.databinding.FragmentLoginBinding;
@@ -54,7 +56,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             activity = getActivity();
         }
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getChildFragmentManager();
         mAuth = FirebaseAuth.getInstance();
 
         binding.loginImgBack.setOnClickListener(this);
@@ -87,16 +89,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             // Sign Up Button
         } else if (v.equals(binding.loginBtnSign)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.first_frame_fragment_container, new SignUpFragment())
-                    .commit();
+            NavDirections action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.loginFragment)
+                navController.navigate(action);
 
 
             // Forgot Password Button
         } else if (v.equals(binding.loginBtnForgot)) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.first_frame_fragment_container, new ForgotPasswordFragment()).addToBackStack(null)
-                    .commit();
+            NavDirections action = LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.loginFragment)
+                navController.navigate(action);
 
         }
     }
@@ -113,8 +119,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             if (user != null && user.isEmailVerified()) {
                                 // Sign in success, update UI with the signed-in user's information1
                                 Toasty.success(activity, getString(R.string.login_toast_login_success), Toast.LENGTH_SHORT, true).show();
-                                startActivity(new Intent(activity, MainActivity.class));
-                                activity.finish();
+                                NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeFragment();
+                                NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+                                NavDestination navDestination = navController.getCurrentDestination();
+                                if (navDestination != null && navDestination.getId() == R.id.loginFragment)
+                                    navController.navigate(action);
                             } else {
                                 updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED);
                                 Toasty.info(activity, getString(R.string.login_toast_please_verify), Toast.LENGTH_LONG, true).show();

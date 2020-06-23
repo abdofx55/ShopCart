@@ -1,4 +1,4 @@
-package com.shopcart.Activities.MainActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;

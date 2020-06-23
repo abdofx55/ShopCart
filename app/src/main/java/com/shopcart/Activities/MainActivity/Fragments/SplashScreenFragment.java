@@ -1,30 +1,28 @@
-package com.shopcart.Activities.MainActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.shopcart.Activities.FirstScreenActivity.FirstScreenActivity;
-import com.shopcart.Activities.OnBoardingActivity.OnBoardingActivity;
 import com.shopcart.DataRepository;
 import com.shopcart.R;
 import com.shopcart.databinding.FragmentSplashScreenBinding;
@@ -36,42 +34,44 @@ import es.dmoral.toasty.Toasty;
  */
 public class SplashScreenFragment extends Fragment {
     public static final String ON_BOARDING_STATE_KEY = "onboarding_state";
-    FirebaseUser firebaseUser;
+    private FirebaseUser firebaseUser;
     private Activity activity;
-    private FragmentSplashScreenBinding binding;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
 
     public SplashScreenFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        activity = getActivity();
+//        if (activity != null) {
+//            // Hide Status Bar
+//            activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//
+//            // Color Navigation Bar
+//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                activity.getWindow().setNavigationBarColor(getResources().getColor(android.R.color.transparent));
+//            }
+//        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        FragmentSplashScreenBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_splash_screen, container, false);
         if (isAdded()) {
             activity = getActivity();
         }
 
-        if (activity != null) {
-            // Hide Status Bar
-            activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-            // Color Navigation Bar
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.getWindow().setNavigationBarColor(getResources().getColor(R.color.gradientStartColor));
-            }
-        }
-
         initializeToasty();
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         DataRepository.getData();
 
 
@@ -81,7 +81,7 @@ public class SplashScreenFragment extends Fragment {
             public void run() {
                 if (DataRepository.isDataDownloaded()) {
                     handler.removeCallbacks(this);
-                    openNextActivity();
+                    showNextFragment();
                 } else
                     handler.postDelayed(this, 100);
             }
@@ -91,18 +91,35 @@ public class SplashScreenFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void openNextActivity() {
+    private void showNextFragment() {
         // Check if we need to display our OnBoardingActivity Activity
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         if (!sharedPreferences.getBoolean(
                 ON_BOARDING_STATE_KEY, false)) {
-            // The user hasn't seen the OnboardingSupportFragment yet, so show it
-            startActivity(new Intent(activity, OnBoardingActivity.class));
+            // The user hasn't seen the OnBoardingFragment yet, so show it
+            NavDirections action = SplashScreenFragmentDirections.actionSplashScreenFragmentToOnBoardingFragment();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.splashScreenFragment)
+                navController.navigate(action);
         } else {
+            // The user has seen the OnBoardingFragment, so check if he signed in
+
             if (firebaseUser != null && firebaseUser.isEmailVerified()) {
-                startActivity(new Intent(activity, MainActivity.class));
+                // The user has signed in , so open HomeFragment
+                NavDirections action = SplashScreenFragmentDirections.actionSplashScreenFragmentToHomeFragment();
+                NavController navController = NavHostFragment.findNavController(this);
+                NavDestination navDestination = navController.getCurrentDestination();
+                if (navDestination != null && navDestination.getId() == R.id.splashScreenFragment)
+                    navController.navigate(action);
+
             } else {
-                startActivity(new Intent(activity, FirstScreenActivity.class));
+                // The user hasn't signed in , so WelcomeFragment
+                NavDirections action = SplashScreenFragmentDirections.actionSplashScreenFragmentToWelcomeFragment();
+                NavController navController = NavHostFragment.findNavController(this);
+                NavDestination navDestination = navController.getCurrentDestination();
+                if (navDestination != null && navDestination.getId() == R.id.splashScreenFragment)
+                    navController.navigate(action);
             }
         }
     }

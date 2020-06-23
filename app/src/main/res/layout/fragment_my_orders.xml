@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity.MyOrdersFragment">
+    tools:context=".Activities.MainActivity.Fragments.MyOrdersFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/orders_img_back"

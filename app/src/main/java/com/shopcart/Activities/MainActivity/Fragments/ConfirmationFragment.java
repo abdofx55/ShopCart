@@ -1,15 +1,14 @@
-package com.shopcart.Activities.MainActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.shopcart.R;
 import com.shopcart.databinding.FragmentConfirmationBinding;

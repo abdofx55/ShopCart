@@ -12,9 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.FirstScreenActivity.FirstScreenActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".Activities.OnBoardingActivity.OnBoardingActivity" />
         <activity
             android:name=".Activities.MainActivity.MainActivity"
             android:launchMode="singleTask">

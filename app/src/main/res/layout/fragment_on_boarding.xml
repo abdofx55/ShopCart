@@ -1,48 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/onboarding_img_icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="48dp"
-        android:padding="16dp"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_txt_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/onboarding_txt_title"
-        style="@style/title"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="@dimen/guideline_margin_2"
-        android:layout_marginRight="@dimen/guideline_margin_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.758"
-        tools:text="Abdo" />
+    </data>
 
-    <TextView
-        android:id="@+id/onboarding_txt_text"
-        style="@style/OnboardingText"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_txt_title"
-        tools:text="How are you my friend" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        tools:context=".Activities.MainActivity.Fragments.OnBoardingFragment.OnBoardingFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/onboarding_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="?attr/actionBarSize" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <Button
+                android:id="@+id/onboarding_btn_skip"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:fontFamily="@font/segoeui"
+                android:text="@string/onboarding_skip"
+                android:textColor="@color/dotSelectedColor" />
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/onboarding_tab_dots"
+                android:layout_width="56dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
+
+            <!-- This overlaps the next button in the last slide -->
+            <Button
+                android:id="@+id/onboarding_btn_finish"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:fontFamily="@font/segoeui"
+                android:text="@string/onboarding_finish"
+                android:textColor="@color/dotSelectedColor"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/onboarding_img_next"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:padding="@dimen/activity_horizontal_margin"
+                app:srcCompat="@drawable/ic_next" />
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

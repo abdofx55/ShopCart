@@ -1,40 +1,36 @@
-package com.shopcart.Activities.MainActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.shopcart.Activities.MainActivity.ProductsAdapter;
 import com.shopcart.DataRepository;
-import com.shopcart.Product;
 import com.shopcart.R;
 import com.shopcart.Utilities.VisualUtils;
-import com.shopcart.databinding.FragmentBestSellBinding;
-
-import java.util.ArrayList;
+import com.shopcart.databinding.FragmentFeaturedBinding;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BestSellFragment extends Fragment {
-    private FragmentBestSellBinding binding;
+public class FeaturedFragment extends Fragment {
+    private FragmentFeaturedBinding binding;
     private Activity activity;
 
     private FirebaseFirestore firebaseFirestore;
-    private ArrayList<Product> list;
     private ProductsAdapter adapter;
 
 
-    public BestSellFragment() {
+    public FeaturedFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +39,7 @@ public class BestSellFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_best_sell, container, false);
+        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_featured, container, false);
 
 
         if (isAdded()) {
@@ -52,18 +48,17 @@ public class BestSellFragment extends Fragment {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        list = new ArrayList<>();
 
         GridLayoutManager layoutManager = new GridLayoutManager(activity , VisualUtils.calculateNoOfColumns(activity , 180 , 8));
-        binding.bestRecycler.setLayoutManager(layoutManager);
-        binding.bestRecycler.addItemDecoration(new VisualUtils.SpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.grid_spacing),
+        binding.featuredRecycler.setLayoutManager(layoutManager);
+        binding.featuredRecycler.addItemDecoration(new VisualUtils.SpacingItemDecoration(getResources().getDimensionPixelSize(R.dimen.grid_spacing),
                 VisualUtils.calculateNoOfColumns(activity , 180 , 8)));
 
         adapter = new ProductsAdapter(activity);
-        binding.bestRecycler.setAdapter(adapter);
-        adapter.setList(DataRepository.getBestSellProducts());
+        binding.featuredRecycler.setAdapter(adapter);
+        adapter.setList(DataRepository.getFeaturedProducts());
 
-        binding.bestImgBack.setOnClickListener(new View.OnClickListener() {
+        binding.featuredImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activity.onBackPressed();

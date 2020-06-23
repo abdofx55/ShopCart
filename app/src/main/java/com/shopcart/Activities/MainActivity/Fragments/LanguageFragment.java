@@ -1,23 +1,22 @@
-package com.shopcart.Activities.MainActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.shopcart.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PaymentFragment extends Fragment {
+public class LanguageFragment extends Fragment {
 
 
-    public PaymentFragment() {
+    public LanguageFragment() {
         // Required empty public constructor
     }
 
@@ -26,7 +25,7 @@ public class PaymentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_payment, container, false);
+        return inflater.inflate(R.layout.fragment_language, container, false);
     }
 
 }

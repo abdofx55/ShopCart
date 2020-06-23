@@ -1,4 +1,4 @@
-package com.shopcart.Activities.FirstScreenActivity;
+package com.shopcart.Activities.MainActivity.Fragments;
 
 
 import android.app.Activity;
@@ -49,7 +49,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
             activity = getActivity();
         }
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getChildFragmentManager();
         mAuth = FirebaseAuth.getInstance();
 
         binding.forgotImgBack.setOnClickListener(this);

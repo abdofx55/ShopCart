@@ -21,7 +21,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Featur
     private Context context;
     private ArrayList<Product> list;
 
-    ProductsAdapter(Context context) {
+    public ProductsAdapter(Context context) {
         this.context = context;
     }
 
@@ -47,7 +47,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Featur
         return 0;
     }
 
-    void setList(ArrayList<Product> list) {
+    public void setList(ArrayList<Product> list) {
         this.list = list;
         notifyDataSetChanged();
     }

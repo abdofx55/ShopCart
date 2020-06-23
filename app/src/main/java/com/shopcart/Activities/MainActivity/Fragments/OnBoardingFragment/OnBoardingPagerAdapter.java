@@ -1,4 +1,4 @@
-package com.shopcart.Activities.OnBoardingActivity;
+package com.shopcart.Activities.MainActivity.Fragments.OnBoardingFragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -58,7 +58,7 @@ class OnBoardingPagerAdapter extends PagerAdapter {
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
-        View view = layoutInflater.inflate(R.layout.fragment_on_boarding, container,false);
+        View view = layoutInflater.inflate(R.layout.item_on_boarding, container, false);
 
         AppCompatImageView mIcon = view.findViewById(R.id.onboarding_img_icon);
         TextView mTitle = view.findViewById(R.id.onboarding_txt_title);

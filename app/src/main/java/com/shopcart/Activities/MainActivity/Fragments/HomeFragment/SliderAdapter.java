@@ -1,4 +1,4 @@
-package com.shopcart.Activities.MainActivity.HomeFragment;
+package com.shopcart.Activities.MainActivity.Fragments.HomeFragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
