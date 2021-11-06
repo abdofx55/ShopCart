@@ -1,6 +1,7 @@
 package com.shopcart.Activities.MainActivity.Fragments;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,14 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.shopcart.R;
+import com.shopcart.Utilities.Tasks;
 import com.shopcart.databinding.FragmentWelcomeBinding;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class WelcomeFragment extends Fragment implements View.OnClickListener {
+    private Activity activity;
     private FragmentWelcomeBinding binding;
     private FragmentManager fragmentManager;
 
@@ -35,6 +38,14 @@ public class WelcomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false);
+
+        if (isAdded()) {
+            activity = getActivity();
+        }
+
+        Tasks.showStatusBar(activity);
+        Tasks.defaultNavigationBar(activity);
+
 
         binding.firstBtnLogin.setOnClickListener(this);
         binding.firstBtnSign.setOnClickListener(this);

@@ -41,21 +41,11 @@ public class SplashScreenFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
+    @Overrided
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        activity = getActivity();
-//        if (activity != null) {
-//            // Hide Status Bar
-//            activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//
-//            // Color Navigation Bar
-//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                activity.getWindow().setNavigationBarColor(getResources().getColor(android.R.color.transparent));
-//            }
-//        }
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -75,20 +65,29 @@ public class SplashScreenFragment extends Fragment {
         DataRepository.getData();
 
 
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (DataRepository.isDataDownloaded()) {
+                if (firebaseUser == null || DataRepository.isDataDownloaded()) {
                     handler.removeCallbacks(this);
                     showNextFragment();
                 } else
                     handler.postDelayed(this, 100);
             }
         };
-        handler.postDelayed(runnable, 100);
 
-        return binding.getRoot();
+        if (firebaseUser == null)
+            handler.postDelayed(runnable, 2000);
+        else
+            handler.postDelayed(runnable, 100);
     }
 
     private void showNextFragment() {

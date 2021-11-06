@@ -35,8 +35,7 @@ public class DataRepository {
     }
     public static User getUserData() {
         if (userData == null) {
-            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
             if (firebaseUser != null) {
@@ -53,13 +52,17 @@ public class DataRepository {
 
     public static ArrayList<Banner> getBanners() {
         if (banners == null) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("banners").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    banners = (ArrayList<Banner>) queryDocumentSnapshots.toObjects(Banner.class);
-                }
-            });
+
+            if (firebaseUser != null) {
+                firebaseFirestore.collection("banners").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        banners = (ArrayList<Banner>) queryDocumentSnapshots.toObjects(Banner.class);
+                    }
+                });
+            }
         }
         return banners;
     }
@@ -67,52 +70,64 @@ public class DataRepository {
 
     public static ArrayList<Category> getCategories() {
         if (categories == null) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("Categories").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    categories = (ArrayList<Category>) queryDocumentSnapshots.toObjects(Category.class);
-                }
-            });
+            if (firebaseUser != null) {
+                firebaseFirestore.collection("Categories").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        categories = (ArrayList<Category>) queryDocumentSnapshots.toObjects(Category.class);
+                    }
+                });
+            }
         }
         return categories;
     }
 
     public static ArrayList<Product> getFeaturedProducts() {
         if (featuredProducts == null) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    featuredProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
-                }
-            });
+            if (firebaseUser != null) {
+                firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        featuredProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
+                    }
+                });
+            }
         }
         return featuredProducts;
     }
 
     public static ArrayList<Product> getBestSellProducts() {
         if (featuredProducts == null) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    bestSellProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
-                }
-            });
+            if (firebaseUser != null) {
+                firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        bestSellProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
+                    }
+                });
+            }
         }
         return bestSellProducts;
     }
 
     public static ArrayList<Product> getFavouriteProducts() {
         if (favouriteProducts == null) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    favouriteProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
-                }
-            });
+            if (firebaseUser != null) {
+                firebaseFirestore.collection("products").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        favouriteProducts = (ArrayList<Product>) queryDocumentSnapshots.toObjects(Product.class);
+                    }
+                });
+            }
         }
         return favouriteProducts;
     }

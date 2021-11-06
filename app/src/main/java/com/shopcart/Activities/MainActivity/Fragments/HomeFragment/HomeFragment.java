@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.shopcart.DataRepository;
 import com.shopcart.R;
 import com.shopcart.User;
+import com.shopcart.Utilities.Tasks;
 import com.shopcart.databinding.FragmentHomeBinding;
 
 /**
@@ -67,6 +68,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (isAdded()) {
             activity = getActivity();
         }
+
+        Tasks.showStatusBar(activity);
+        Tasks.defaultNavigationBar(activity);
 
         fragmentManager = getParentFragmentManager();
         user = DataRepository.getUserData();
@@ -188,7 +192,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        checkIfSignedIn();
         sliderHandler.postDelayed(sliderRunnable, sliderDelay);
+    }
+
+    private void checkIfSignedIn() {
+        if (mAuth == null || mAuth.getCurrentUser() == null) {
+            NavDirections action = HomeFragmentDirections.actionHomeFragmentToEntryFragments();
+            NavController navController = NavHostFragment.findNavController(this);
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
+                navController.navigate(action);
+        }
     }
 
     @Override

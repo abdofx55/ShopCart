@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -22,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.shopcart.Activities.MainActivity.Fragments.SplashScreenFragment;
 import com.shopcart.R;
+import com.shopcart.Utilities.Tasks;
 import com.shopcart.databinding.FragmentOnBoardingBinding;
 
 /**
@@ -29,8 +27,6 @@ import com.shopcart.databinding.FragmentOnBoardingBinding;
  */
 public class OnBoardingFragment extends Fragment implements View.OnClickListener {
     int currentPage;
-    Button mSkipButton, mFinishButton;
-    AppCompatImageView mNextButton;
     OnBoardingPagerAdapter onBoardingPagerAdapter;
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -40,14 +36,14 @@ public class OnBoardingFragment extends Fragment implements View.OnClickListener
         @Override
         public void onPageSelected(int position) {
             if (position == onBoardingPagerAdapter.getCount() - 1) {
-                mSkipButton.setVisibility(View.INVISIBLE);
-                mNextButton.setVisibility(View.GONE);
-                mFinishButton.setVisibility(View.VISIBLE);
+                binding.onboardingBtnSkip.setVisibility(View.INVISIBLE);
+                binding.onboardingImgNext.setVisibility(View.GONE);
+                binding.onboardingBtnFinish.setVisibility(View.VISIBLE);
 
             } else {
-                mSkipButton.setVisibility(View.VISIBLE);
-                mNextButton.setVisibility(View.VISIBLE);
-                mFinishButton.setVisibility(View.GONE);
+                binding.onboardingBtnSkip.setVisibility(View.VISIBLE);
+                binding.onboardingImgNext.setVisibility(View.VISIBLE);
+                binding.onboardingBtnFinish.setVisibility(View.GONE);
             }
         }
 
@@ -65,16 +61,6 @@ public class OnBoardingFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        activity = getActivity();
-//        if (activity != null) {
-//            activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -82,6 +68,9 @@ public class OnBoardingFragment extends Fragment implements View.OnClickListener
         if (isAdded()) {
             activity = getActivity();
         }
+
+        Tasks.hideStatusBar(activity);
+        Tasks.defaultNavigationBar(activity);
 
         onBoardingPagerAdapter = new OnBoardingPagerAdapter(activity);
         binding.onboardingPager.setAdapter(onBoardingPagerAdapter);

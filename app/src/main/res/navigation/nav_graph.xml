@@ -15,25 +15,33 @@
             app:destination="@id/cartFragment" />
         <action
             android:id="@+id/action_menuFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true" />
         <action
             android:id="@+id/action_menuFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
         <action
             android:id="@+id/action_menuFragment_to_favouriteFragment"
-            app:destination="@id/favouriteFragment" />
+            app:destination="@id/favouriteFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
         <action
             android:id="@+id/action_menuFragment_to_myOrdersFragment"
-            app:destination="@id/myOrdersFragment" />
+            app:destination="@id/myOrdersFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
         <action
             android:id="@+id/action_menuFragment_to_languageFragment"
-            app:destination="@id/languageFragment" />
+            app:destination="@id/languageFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
         <action
             android:id="@+id/action_menuFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_menuFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            app:destination="@id/settingsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
     </fragment>
 
     <fragment
@@ -47,16 +55,28 @@
             app:enterAnim="@anim/slide_in_top"
             app:launchSingleTop="true"
             app:popExitAnim="@anim/slide_out_top"
-            app:popUpTo="@+id/menuFragment" />
+            app:popUpTo="@+id/homeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/homeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_featuredFragment"
-            app:destination="@id/featuredFragment" />
+            app:destination="@id/featuredFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/menuFragment" />
         <action
             android:id="@+id/action_homeFragment_to_bestSellFragment"
-            app:destination="@id/bestSellFragment" />
+            app:destination="@id/bestSellFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_entry_fragments"
+            app:destination="@+id/entry_fragments"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -65,25 +85,24 @@
         tools:layout="@layout/fragment_splash_screen">
         <action
             android:id="@+id/action_splashScreenFragment_to_onBoardingFragment"
-            app:destination="@id/onBoardingFragment" />
+            app:destination="@id/onBoardingFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/splashScreenFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashScreenFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            app:destination="@id/entry_fragments"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/splashScreenFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashScreenFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.WelcomeFragment"
-        android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome">
-        <action
-            android:id="@+id/action_welcomeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_welcomeFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
@@ -92,37 +111,11 @@
         tools:layout="@layout/fragment_on_boarding">
         <action
             android:id="@+id/action_onBoardingFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            app:destination="@id/entry_fragments"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/onBoardingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
-            app:destination="@id/forgotPasswordFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up">
-        <action
-            android:id="@+id/action_signUpFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/forgotPasswordFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.ForgotPasswordFragment"
-        android:label="fragment_forgot_password"
-        tools:layout="@layout/fragment_forgot_password" />
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.shopcart.Activities.MainActivity.Fragments.CartFragment"
@@ -163,4 +156,62 @@
         android:name="com.shopcart.Activities.MainActivity.Fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <navigation
+        android:id="@+id/entry_fragments"
+        app:startDestination="@id/welcomeFragment">
+        <fragment
+            android:id="@+id/welcomeFragment"
+            android:name="com.shopcart.Activities.MainActivity.Fragments.WelcomeFragment"
+            android:label="fragment_welcome"
+            tools:layout="@layout/fragment_welcome">
+            <action
+                android:id="@+id/action_welcomeFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/welcomeFragment" />
+            <action
+                android:id="@+id/action_welcomeFragment_to_signUpFragment"
+                app:destination="@id/signUpFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/welcomeFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.shopcart.Activities.MainActivity.Fragments.LoginFragment"
+            android:label="fragment_login"
+            tools:layout="@layout/fragment_login">
+            <action
+                android:id="@+id/action_loginFragment_to_homeFragment"
+                app:destination="@id/homeFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/entry_fragments"
+                app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+                app:destination="@id/forgotPasswordFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/loginFragment" />
+            <action
+                android:id="@+id/action_loginFragment_to_signUpFragment"
+                app:destination="@id/signUpFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/welcomeFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/signUpFragment"
+            android:name="com.shopcart.Activities.MainActivity.Fragments.SignUpFragment"
+            android:label="fragment_sign_up"
+            tools:layout="@layout/fragment_sign_up">
+            <action
+                android:id="@+id/action_signUpFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/welcomeFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/forgotPasswordFragment"
+            android:name="com.shopcart.Activities.MainActivity.Fragments.ForgotPasswordFragment"
+            android:label="fragment_forgot_password"
+            tools:layout="@layout/fragment_forgot_password" />
+    </navigation>
 </navigation>

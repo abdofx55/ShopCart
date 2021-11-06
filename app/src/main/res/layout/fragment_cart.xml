@@ -27,7 +27,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
+        android:padding="14dp"
         app:layout_constraintBottom_toTopOf="@+id/featured_img_back"
         app:layout_constraintEnd_toStartOf="@+id/cart_guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/featured_img_back"

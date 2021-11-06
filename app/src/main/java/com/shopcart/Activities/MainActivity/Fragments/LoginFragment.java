@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shopcart.DataRepository;
 import com.shopcart.R;
 import com.shopcart.Utilities.NetworkUtils;
 import com.shopcart.databinding.FragmentLoginBinding;
@@ -115,15 +116,33 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         if (isAdded()) {
-                            FirebaseUser user = authResult.getUser();
+                            final FirebaseUser user = authResult.getUser();
                             if (user != null && user.isEmailVerified()) {
-                                // Sign in success, update UI with the signed-in user's information1
-                                Toasty.success(activity, getString(R.string.login_toast_login_success), Toast.LENGTH_SHORT, true).show();
-                                NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeFragment();
-                                NavController navController = NavHostFragment.findNavController(LoginFragment.this);
-                                NavDestination navDestination = navController.getCurrentDestination();
-                                if (navDestination != null && navDestination.getId() == R.id.loginFragment)
-                                    navController.navigate(action);
+                                // Sign in success, Download Data then update UI with the signed-in user's information1
+
+                                DataRepository.getData();
+
+                                final Handler handler = new Handler();
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (DataRepository.isDataDownloaded()) {
+                                            handler.removeCallbacks(this);
+
+                                            Toasty.success(activity, getString(R.string.login_toast_login_success), Toast.LENGTH_SHORT, true).show();
+                                            NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeFragment();
+                                            NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+                                            NavDestination navDestination = navController.getCurrentDestination();
+                                            if (navDestination != null && navDestination.getId() == R.id.loginFragment)
+                                                navController.navigate(action);
+
+                                        } else
+                                            handler.postDelayed(this, 50);
+                                    }
+                                };
+                                handler.postDelayed(runnable, 0);
+
+
                             } else {
                                 updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED);
                                 Toasty.info(activity, getString(R.string.login_toast_please_verify), Toast.LENGTH_LONG, true).show();

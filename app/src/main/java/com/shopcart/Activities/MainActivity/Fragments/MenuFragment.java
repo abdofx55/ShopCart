@@ -112,13 +112,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
 
         }else if (v.equals(binding.menuBtnSignOut)) {
-            Tasks.signOut(activity , firebaseAuth);
-            NavDirections action = MenuFragmentDirections.actionMenuFragmentToWelcomeFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.menuFragment)
-                navController.navigate(action);
-
+            Tasks.signOut(activity, firebaseAuth);
+            activity.onBackPressed();
 
         } else if (v.equals(binding.menuImgClose)) {
             activity.onBackPressed();
