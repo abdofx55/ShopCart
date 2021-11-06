@@ -41,7 +41,7 @@ public class SplashScreenFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Overrided
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
