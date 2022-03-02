@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        tools:context=".Activities.FirstScreenActivity.FirstScreenActivity">
+        tools:context=".ui.Activities.FirstScreenActivity.FirstScreenActivity">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/first_img_background"

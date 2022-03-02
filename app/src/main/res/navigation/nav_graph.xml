@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.MenuFragment"
+        android:name="com.shopcart.ui.Fragments.MenuFragment"
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu">
         <action
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.HomeFragment.HomeFragment"
+        android:name="com.shopcart.ui.Fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.SplashScreenFragment"
+        android:name="com.shopcart.ui.Fragments.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
@@ -106,7 +106,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.OnBoardingFragment.OnBoardingFragment"
+        android:name="com.shopcart.ui.Fragments.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding">
         <action
@@ -118,42 +118,42 @@
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.CartFragment"
+        android:name="com.shopcart.ui.Fragments.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/featuredFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.FeaturedFragment"
+        android:name="com.shopcart.ui.Fragments.FeaturedFragment"
         android:label="fragment_featured"
         tools:layout="@layout/fragment_featured" />
     <fragment
         android:id="@+id/bestSellFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.BestSellFragment"
+        android:name="com.shopcart.ui.Fragments.BestSellFragment"
         android:label="fragment_best_sell"
         tools:layout="@layout/fragment_best_sell" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.ProfileFragment"
+        android:name="com.shopcart.ui.Fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.FavouriteFragment"
+        android:name="com.shopcart.ui.Fragments.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" />
     <fragment
         android:id="@+id/myOrdersFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.MyOrdersFragment"
+        android:name="com.shopcart.ui.Fragments.MyOrdersFragment"
         android:label="fragment_my_orders"
         tools:layout="@layout/fragment_my_orders" />
     <fragment
         android:id="@+id/languageFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.LanguageFragment"
+        android:name="com.shopcart.ui.Fragments.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.shopcart.Activities.MainActivity.Fragments.SettingsFragment"
+        android:name="com.shopcart.ui.Fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <navigation
@@ -161,7 +161,7 @@
         app:startDestination="@id/welcomeFragment">
         <fragment
             android:id="@+id/welcomeFragment"
-            android:name="com.shopcart.Activities.MainActivity.Fragments.WelcomeFragment"
+            android:name="com.shopcart.ui.Fragments.WelcomeFragment"
             android:label="fragment_welcome"
             tools:layout="@layout/fragment_welcome">
             <action
@@ -177,7 +177,7 @@
         </fragment>
         <fragment
             android:id="@+id/loginFragment"
-            android:name="com.shopcart.Activities.MainActivity.Fragments.LoginFragment"
+            android:name="com.shopcart.ui.Fragments.LoginFragment"
             android:label="fragment_login"
             tools:layout="@layout/fragment_login">
             <action
@@ -199,7 +199,7 @@
         </fragment>
         <fragment
             android:id="@+id/signUpFragment"
-            android:name="com.shopcart.Activities.MainActivity.Fragments.SignUpFragment"
+            android:name="com.shopcart.ui.Fragments.SignUpFragment"
             android:label="fragment_sign_up"
             tools:layout="@layout/fragment_sign_up">
             <action
@@ -210,7 +210,7 @@
         </fragment>
         <fragment
             android:id="@+id/forgotPasswordFragment"
-            android:name="com.shopcart.Activities.MainActivity.Fragments.ForgotPasswordFragment"
+            android:name="com.shopcart.ui.Fragments.ForgotPasswordFragment"
             android:label="fragment_forgot_password"
             tools:layout="@layout/fragment_forgot_password" />
     </navigation>
