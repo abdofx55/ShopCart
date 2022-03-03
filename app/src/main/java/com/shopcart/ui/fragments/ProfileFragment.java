@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        user = Repository.getUserData();
+        user = Repository.getUser();
 
         getUserProfile();
 

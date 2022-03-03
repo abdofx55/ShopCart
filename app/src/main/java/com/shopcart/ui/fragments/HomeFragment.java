@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Tasks.defaultNavigationBar(activity);
 
         fragmentManager = getParentFragmentManager();
-        user = Repository.getUserData();
+        user = Repository.getUser();
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         binding.homeTxtFeaturedMore.setOnClickListener(this);
         binding.homeTxtBestMore.setOnClickListener(this);
 
-        sliderAdapter = new SliderAdapter(activity);
+        sliderAdapter = new SliderAdapter();
         featuredAdapter = new HorizontalAdapter(activity);
         bestAdapter = new HorizontalAdapter(activity);
         categoriesAdapter = new CategoriesAdapter(activity);
