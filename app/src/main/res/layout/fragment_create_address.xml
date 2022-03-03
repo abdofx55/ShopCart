@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.Fragments.CreateAddressFragment">
+        tools:context=".ui.fragments.CreateAddressFragment">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/address_img_back"
@@ -51,7 +51,6 @@
             app:layout_constraintEnd_toStartOf="@+id/address_guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/address_img_search"
             app:srcCompat="@drawable/ic_shopping_cart" />
-
 
 
         <TextView

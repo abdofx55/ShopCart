@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
@@ -23,8 +23,8 @@
         android:id="@+id/payment_txt_discount_label"
         style="@style/Label"
         android:layout_marginTop="10dp"
-        android:textSize="@dimen/edit_text_text_size"
         android:text="@string/payment_txt_discount"
+        android:textSize="@dimen/edit_text_text_size"
         app:layout_constraintStart_toStartOf="@+id/payment_txt_subtotal_label"
         app:layout_constraintTop_toBottomOf="@+id/payment_txt_subtotal_label" />
 
@@ -39,8 +39,8 @@
         android:id="@+id/payment_txt_shipping_label"
         style="@style/Label"
         android:layout_marginTop="10dp"
-        android:textSize="@dimen/edit_text_text_size"
         android:text="@string/payment_txt_shipping"
+        android:textSize="@dimen/edit_text_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payment_txt_discount_label" />
 

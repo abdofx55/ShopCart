@@ -14,8 +14,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.shopcart.Category;
 import com.shopcart.R;
+import com.shopcart.data.models.Category;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapter.CategoriesAdapterViewHolder holder, int position) {
-        holder.bind(list , position);
+        holder.bind(list, position);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
             name = view.findViewById(R.id.category_txt_name);
         }
 
-        void bind(ArrayList<Category> list, int position){
+        void bind(ArrayList<Category> list, int position) {
             if (list != null && !list.isEmpty()) {
                 Category category = list.get(position);
 
@@ -82,21 +82,22 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
                 }
 
                 if (photoUrl != null && !photoUrl.isEmpty()) {
-                    photo.setColorFilter(new PorterDuffColorFilter(determineColorFilter(category.getColorFilter()), PorterDuff.Mode.SRC_OVER));                }
+                    photo.setColorFilter(new PorterDuffColorFilter(determineColorFilter(category.getColorFilter()), PorterDuff.Mode.SRC_OVER));
+                }
 
 
             }
         }
 
-        int determineColorFilter(int colorFilter){
+        int determineColorFilter(int colorFilter) {
             switch (colorFilter) {
                 case 1:
-                    return Color.argb(100 , 255 , 0 , 0);  //Red
+                    return Color.argb(100, 255, 0, 0);  //Red
                 case 2:
-                    return Color.argb(100 , 0 , 255 , 0);  //Green
+                    return Color.argb(100, 0, 255, 0);  //Green
                 case 3:
                 default:
-                    return Color.argb(100 , 0 , 0 , 255);  //Blue
+                    return Color.argb(100, 0, 0, 255);  //Blue
             }
         }
     }

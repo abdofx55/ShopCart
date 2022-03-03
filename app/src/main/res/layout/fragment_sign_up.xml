@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        tools:context=".ui.Activities.SignUp">
+        tools:context=".ui.activities.SignUp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/sign_img_back"

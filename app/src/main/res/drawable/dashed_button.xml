@@ -4,11 +4,10 @@
     android:visible="false">
 
     <stroke
-        android:color="@color/gradientStartColor"
         android:width="5px"
+        android:color="@color/gradientStartColor"
         android:dashWidth="5px"
-        android:dashGap="10px"/>
+        android:dashGap="10px" />
 
-    <corners
-        android:radius="7dp"/>
+    <corners android:radius="7dp" />
 </shape>
