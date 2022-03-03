@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Fragments.PaymentFragment">
+    tools:context=".ui.fragments.PaymentFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/payment_img_back"
@@ -81,8 +81,7 @@
             android:id="@+id/payment_layout_body"
             layout="@layout/payment_body"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 

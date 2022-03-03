@@ -28,9 +28,7 @@
     <!--    #2E3192-->
 
 
-
-
-<!--Toasty Colors-->
+    <!--Toasty Colors-->
     <color name="defaultTextColor">#FFFFFF</color>
     <color name="errorColor">@color/primaryText</color>
     <color name="infoColor">@color/secondaryText</color>

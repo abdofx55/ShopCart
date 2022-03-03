@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        tools:context=".ui.Fragments.MenuFragment">
+        tools:context=".ui.fragments.MenuFragment">
 
         <Button
             android:id="@+id/menu_btn_home"

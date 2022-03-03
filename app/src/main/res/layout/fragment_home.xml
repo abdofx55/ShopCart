@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
-        tools:context=".ui.Fragments.HomeFragment">
+        tools:context=".ui.fragments.HomeFragment">
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -51,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:paddingBottom="8dp"
             android:clipToPadding="false"
+            android:paddingBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -63,8 +63,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/home_cardView_slider"
@@ -82,18 +81,18 @@
                         android:id="@+id/home_pager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@android:color/transparent"/>
+                        android:background="@android:color/transparent" />
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/home_tab_dots"
                         android:layout_width="56dp"
                         android:layout_height="16dp"
                         android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="4dp"
+                        android:background="@android:color/transparent"
                         android:orientation="horizontal"
                         app:tabBackground="@drawable/tab_selector"
                         app:tabGravity="center"
-                        android:layout_marginBottom="4dp"
-                        android:background="@android:color/transparent"
                         app:tabIndicatorHeight="0dp" />
 
                 </androidx.cardview.widget.CardView>
@@ -185,8 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:clipToPadding="false"
-                    android:paddingRight="@dimen/guideline_margin_2"
                     android:paddingLeft="@dimen/guideline_margin_2"
+                    android:paddingRight="@dimen/guideline_margin_2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"

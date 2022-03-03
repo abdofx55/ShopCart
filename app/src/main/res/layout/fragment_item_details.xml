@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Fragments.ItemDetailsFragment">
+    tools:context=".ui.fragments.ItemDetailsFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/item_img_back"
@@ -45,7 +45,6 @@
         app:layout_constraintEnd_toStartOf="@+id/item_guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/item_img_share"
         app:srcCompat="@drawable/ic_shopping_cart" />
-
 
 
     <androidx.constraintlayout.widget.Guideline

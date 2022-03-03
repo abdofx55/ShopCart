@@ -64,10 +64,10 @@
         <TextView
             android:id="@+id/product_txt_currency"
             style="@style/Value"
-            tools:text="EGP"
             app:layout_constraintBottom_toTopOf="@+id/product_txt_price"
             app:layout_constraintStart_toEndOf="@+id/product_txt_price"
-            app:layout_constraintTop_toBottomOf="@+id/product_txt_price" />
+            app:layout_constraintTop_toBottomOf="@+id/product_txt_price"
+            tools:text="EGP" />
 
 
         <androidx.constraintlayout.widget.Guideline

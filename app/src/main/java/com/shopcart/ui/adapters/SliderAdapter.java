@@ -10,8 +10,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.shopcart.Banner;
 import com.shopcart.R;
+import com.shopcart.data.models.Banner;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class SliderAdapter extends PagerAdapter {
     @Override
     public int getCount() {
         if (list != null)
-             return list.size();
+            return list.size();
         return 0;
     }
 

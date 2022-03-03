@@ -11,8 +11,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.shopcart.Product;
 import com.shopcart.R;
+import com.shopcart.data.models.Product;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -37,7 +37,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Featur
 
     @Override
     public void onBindViewHolder(@NonNull ProductsAdapter.FeaturedAdapterViewHolder holder, int position) {
-        holder.bind(list , position);
+        holder.bind(list, position);
     }
 
     @Override
@@ -65,11 +65,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Featur
             name = view.findViewById(R.id.product_txt_name);
         }
 
-        void bind(ArrayList<Product> list, int position){
+        void bind(ArrayList<Product> list, int position) {
             if (list != null && !list.isEmpty()) {
                 Product product = list.get(position);
                 Glide.with(context).load(product.getPhotosUrl().get(0)).into(photo);
-                price.setText(String.format(Locale.ENGLISH,"%.2f", product.getPrice()));
+                price.setText(String.format(Locale.ENGLISH, "%.2f", product.getPrice()));
                 name.setText(product.getName());
             }
         }
