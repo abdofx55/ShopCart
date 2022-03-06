@@ -1,209 +1,184 @@
-package com.shopcart.ui.fragments;
+package com.shopcart.ui.fragments
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import com.shopcart.R
+import com.shopcart.data.models.User
+import com.shopcart.databinding.FragmentSignUpBinding
+import com.shopcart.utilities.NetworkUtils.Companion.isConnected
+import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty
+import javax.inject.Inject
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+@AndroidEntryPoint
+class SignUpFragment : Fragment(), View.OnClickListener {
+    private lateinit var binding: FragmentSignUpBinding
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.shopcart.R;
-import com.shopcart.data.models.User;
-import com.shopcart.databinding.FragmentSignUpBinding;
-import com.shopcart.utilities.NetworkUtils;
+    @Inject
+    lateinit var fireStore: FirebaseFirestore
 
-import es.dmoral.toasty.Toasty;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SignUpFragment extends Fragment implements View.OnClickListener {
-    // Flags to update UI
-    private static final int UPDATE_UI_WHEN_SIGNING_IN = 1;
-    private static final int RESET_UI_WHEN_SIGNING_FAILED = 0;
-    FirebaseUser user;
-    FirebaseFirestore firebaseFirestore;
-    private Activity activity;
-    private FragmentSignUpBinding binding;
-    private FragmentManager fragmentManager;
-    private FirebaseAuth mAuth;
-
-
-    public SignUpFragment() {
-        // Required empty public constructor
+    companion object {
+        // Flags to update UI
+        private const val UPDATE_UI_WHEN_SIGNING_IN = 1
+        private const val RESET_UI_WHEN_SIGNING_FAILED = 0
     }
 
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false);
-        if (isAdded()) {
-            activity = getActivity();
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false)
+
+        binding.apply {
+            signImgBack.setOnClickListener(this@SignUpFragment)
+            signBtnSign.setOnClickListener(this@SignUpFragment)
+            signBtnLogin.setOnClickListener(this@SignUpFragment)
         }
 
-        fragmentManager = getChildFragmentManager();
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-
-        binding.signImgBack.setOnClickListener(this);
-        binding.signBtnSign.setOnClickListener(this);
-        binding.signBtnLogin.setOnClickListener(this);
-
-        return binding.getRoot();
+        return binding.root
     }
 
-
-    @Override
-    public void onClick(View v) {
-        // Back Button
-        if (v.equals(binding.signImgBack)) {
-            activity.onBackPressed();
+    override fun onClick(v: View) {
+        when (v) {
+            // Back Button
+            binding.signImgBack -> requireActivity().onBackPressed()
+            binding.signBtnSign -> {
+                if (isConnected((activity)!!)) {
+                    updateUIWhenSigning(UPDATE_UI_WHEN_SIGNING_IN)
+                    signUp()
+                } else Toasty.warning(
+                    requireContext(),
+                    getString(R.string.no_internet),
+                    Toast.LENGTH_SHORT,
+                    true
+                ).show()
+            }
+            binding.signBtnLogin -> {
+                val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
+                val navController = NavHostFragment.findNavController(this)
+                val navDestination = navController.currentDestination
+                if (navDestination != null && navDestination.id == R.id.signUpFragment) navController.navigate(
+                    action
+                )
+            }
         }
-
-        // Sign up Button
-        else if (v.equals(binding.signBtnSign)) {
-            if (NetworkUtils.isConnected(activity)) {
-                updateUIWhenSigning(UPDATE_UI_WHEN_SIGNING_IN);
-                signUp();
-            } else
-                Toasty.warning(activity, getString(R.string.no_internet), Toast.LENGTH_SHORT, true).show();
-        }
-
-        // Sign In Button
-        else if (v.equals(binding.signBtnLogin)) {
-            NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.signUpFragment)
-                navController.navigate(action);
-
-        }
-
     }
 
-    private void signUp() {
-        mAuth.createUserWithEmailAndPassword(binding.signLayoutBody.signEditEmail.getText().toString().trim(),
-                binding.signLayoutBody.signEditPassword.getText().toString().trim())
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        user = authResult.getUser();
-                        if (isAdded() && user != null) {
-                            sendVerification(user);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+    private fun signUp() {
+        firebaseAuth.createUserWithEmailAndPassword(
+            binding.signLayoutBody.signEditEmail.text.toString().trim { it <= ' ' },
+            binding.signLayoutBody.signEditPassword.text.toString().trim { it <= ' ' })
+            .addOnSuccessListener {
+                if (isAdded && it.user != null) {
+                    sendVerification(it.user)
+                }
+            }.addOnFailureListener { e ->
                 // First Check if the fragment still added
-                if (isAdded()) {
+                if (isAdded) {
                     // If sign in fails, display a message to the user.
-                    updateUIWhenSigning(RESET_UI_WHEN_SIGNING_FAILED);
-                    if (e.getLocalizedMessage() != null)
-                        Toasty.error(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG, true).show();
+                    updateUIWhenSigning(RESET_UI_WHEN_SIGNING_FAILED)
+                    Toasty.error(
+                        requireContext(),
+                        e.localizedMessage,
+                        Toast.LENGTH_LONG,
+                        true
+                    ).show()
                 }
             }
-        });
-
-
     }
 
-    private void sendVerification(final FirebaseUser user) {
-        if (user != null) {
-            user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    addUserToDatabase(user);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    user.delete();
-                    if (e.getLocalizedMessage() != null)
-                        Toasty.error(activity, "Failed to create a new account" + "\n" + e.getLocalizedMessage(), Toast.LENGTH_LONG,
-                                true).show();
-                }
-            });
-        }
+    private fun sendVerification(user: FirebaseUser?) {
+        user?.sendEmailVerification()?.addOnSuccessListener { addUserToDatabase(user) }
+            ?.addOnFailureListener { e ->
+                user.delete()
+                Toasty.error(
+                    requireContext(),
+                    "Failed to create a new account" + "\n" + e.localizedMessage,
+                    Toast.LENGTH_LONG,
+                    true
+                ).show()
+            }
     }
 
-    private void addUserToDatabase(final FirebaseUser user) {
+    private fun addUserToDatabase(user: FirebaseUser?) {
         if (user != null) {
             // Create a new user with a name
-
-            User newUser = new User();
-            newUser.setId(user.getUid());
-            newUser.setEmail(binding.signLayoutBody.signEditEmail.getText().toString().trim());
-            newUser.setName(binding.signLayoutBody.signEditName.getText().toString().trim());
+            val newUser = User()
+            newUser.id = user.uid
+            newUser.email =
+                binding.signLayoutBody.signEditEmail.text.toString().trim { it <= ' ' }
+            newUser.name = binding.signLayoutBody.signEditName.text.toString().trim { it <= ' ' }
 
             // Add a new document with a user ID
-            firebaseFirestore.collection("users").document(user.getUid()).set(newUser)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            if (isAdded()) {
-                                Toasty.success(activity, getString(R.string.sign_toast_sign_success), Toast.LENGTH_LONG, true).show();
-                                NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-                                NavController navController = NavHostFragment.findNavController(SignUpFragment.this);
-                                NavDestination navDestination = navController.getCurrentDestination();
-                                if (navDestination != null && navDestination.getId() == R.id.signUpFragment)
-                                    navController.navigate(action);
-
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    user.delete();
-                    if (e.getLocalizedMessage() != null)
-                        Toasty.error(activity, "Failed to create a new account" + "\n" + e.getLocalizedMessage(), Toast.LENGTH_LONG,
-                                true).show();
+            fireStore.collection("users").document(user.uid).set(newUser)
+                .addOnSuccessListener {
+                    if (isAdded) {
+                        Toasty.success(
+                            (activity)!!,
+                            getString(R.string.sign_toast_sign_success),
+                            Toast.LENGTH_LONG,
+                            true
+                        ).show()
+                        val action =
+                            SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
+                        val navController =
+                            NavHostFragment.findNavController(this@SignUpFragment)
+                        val navDestination = navController.currentDestination
+                        if (navDestination != null && navDestination.id == R.id.signUpFragment) navController.navigate(
+                            action
+                        )
+                    }
+                }.addOnFailureListener { e ->
+                    user.delete()
+                    Toasty.error(
+                        requireContext(),
+                        "Failed to create a new account" + "\n" + e.localizedMessage,
+                        Toast.LENGTH_LONG,
+                        true
+                    ).show()
                 }
-            });
         }
     }
 
-    private void updateUIWhenSigning(int flag) {
+    private fun updateUIWhenSigning(flag: Int) {
         // First Check if the fragment still added
-        if (isAdded()) {
+        if (isAdded) {
             //Second Check Flag whether update or reset UI
             if (flag == UPDATE_UI_WHEN_SIGNING_IN) {
                 // Update UI during sign up
-                binding.signLayoutBody.signEditName.setEnabled(false);
-                binding.signLayoutBody.signEditEmail.setEnabled(false);
-                binding.signLayoutBody.signEditPassword.setEnabled(false);
-                binding.signBtnSign.setEnabled(false);
-                binding.signBtnSign.setText(activity.getString(R.string.sign_signing));
-                binding.signSpinKit.setVisibility(View.VISIBLE);
+                binding.apply {
+                    signLayoutBody.signEditName.isEnabled = false
+                    signLayoutBody.signEditEmail.isEnabled = false
+                    signLayoutBody.signEditPassword.isEnabled = false
+                    signBtnSign.isEnabled = false
+                    signBtnSign.text = activity!!.getString(R.string.sign_signing)
+                    signSpinKit.visibility = View.VISIBLE
+                }
 
             } else if (flag == RESET_UI_WHEN_SIGNING_FAILED) {
                 // Reset UI if sign up failed
-                binding.signLayoutBody.signEditName.setEnabled(true);
-                binding.signLayoutBody.signEditEmail.setEnabled(true);
-                binding.signLayoutBody.signEditPassword.setEnabled(true);
-                binding.signBtnSign.setEnabled(true);
-                binding.signBtnSign.setText(activity.getString(R.string.sign_sign));
-                binding.signSpinKit.setVisibility(View.INVISIBLE);
+                binding.apply {
+                    signLayoutBody.signEditName.isEnabled = true
+                    signLayoutBody.signEditEmail.isEnabled = true
+                    signLayoutBody.signEditPassword.isEnabled = true
+                    signBtnSign.isEnabled = true
+                    signBtnSign.text = activity!!.getString(R.string.sign_sign)
+                    signSpinKit.visibility = View.INVISIBLE
+                }
+
             }
         }
     }

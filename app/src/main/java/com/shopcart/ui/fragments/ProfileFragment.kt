@@ -1,133 +1,130 @@
-package com.shopcart.ui.fragments;
+package com.shopcart.ui.fragments
 
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.shopcart.R;
-import com.shopcart.data.Repository;
-import com.shopcart.data.models.User;
-import com.shopcart.databinding.FragmentProfileBinding;
-
-import es.dmoral.toasty.Toasty;
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.shopcart.R
+import com.shopcart.data.models.User
+import com.shopcart.databinding.FragmentProfileBinding
+import com.shopcart.ui.viewModels.MainViewModel
+import es.dmoral.toasty.Toasty
+import javax.inject.Inject
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple [Fragment] subclass.
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private Activity activity;
-    private FragmentProfileBinding binding;
+class ProfileFragment : Fragment(), View.OnClickListener {
+    private lateinit var binding: FragmentProfileBinding
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private User user;
-    private final TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    @Inject
+    lateinit var firestore: FirebaseFirestore
+    private val viewModel: MainViewModel by viewModels()
+
+    private val textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            if (isDataChanged()) binding.profileBtnSave.visibility =
+                View.VISIBLE else binding.profileBtnSave.visibility = View.INVISIBLE
         }
 
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (isDataChanged())
-                binding.profileBtnSave.setVisibility(View.VISIBLE);
-            else
-                binding.profileBtnSave.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    };
-    private FirebaseFirestore firebaseFirestore;
-
-
-    public ProfileFragment() {
-        // Required empty public constructor
+        override fun afterTextChanged(s: Editable) {}
     }
 
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
 
-        if (isAdded()) activity = getActivity();
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        user = Repository.getUser();
+        getUserProfile()
 
-        getUserProfile();
+        binding.apply {
+            profileImgBack.setOnClickListener(this@ProfileFragment)
+            profileBtnSave.setOnClickListener(this@ProfileFragment)
+        }
 
-        binding.profileImgBack.setOnClickListener(this);
-        binding.profileBtnSave.setOnClickListener(this);
-
-        return binding.getRoot();
+        return binding.root
     }
 
-    private void getUserProfile() {
-        if (user != null) {
-            updateUi(user);
+    private fun getUserProfile() {
+        viewModel.user.value?.let { updateUi(it) }
+    }
+
+    private fun updateUi(user: User) {
+        binding.apply {
+            profileBody.profileEditName.setText(if (user.name != null) user.name else "")
+            profileBody.profileEditAddress.setText(if (user.address != null) user.address else "")
+            profileBody.profileEditCity.setText(if (user.city != null) user.city else "")
+            profileBody.profileEditGender.setText(user.gender.toString())
+            profileBody.profileEditEmail.setText(if (user.email != null) user.email else "")
+            profileBody.profileEditMobile.setText(if (user.mobile != null) user.mobile else "")
+
+            // Add text watcher to enable save button if text changed
+            profileBody.profileEditName.addTextChangedListener(textWatcher)
+            profileBody.profileEditAddress.addTextChangedListener(textWatcher)
+            profileBody.profileEditCity.addTextChangedListener(textWatcher)
+            profileBody.profileEditGender.addTextChangedListener(textWatcher)
+            profileBody.profileEditEmail.addTextChangedListener(textWatcher)
+            profileBody.profileEditMobile.addTextChangedListener(textWatcher)
         }
     }
 
-
-    private void updateUi(User user) {
-        binding.profileBody.profileEditName.setText(user.getName() != null ? user.getName() : "");
-        binding.profileBody.profileEditAddress.setText(user.getAddress() != null ? user.getAddress() : "");
-        binding.profileBody.profileEditCity.setText(user.getCity() != null ? user.getCity() : "");
-        binding.profileBody.profileEditGender.setText(String.valueOf(user.getGender()));
-        binding.profileBody.profileEditEmail.setText(user.getEmail() != null ? user.getEmail() : "");
-        binding.profileBody.profileEditMobile.setText(user.getMobile() != null ? user.getMobile() : "");
-
-        // Add text watcher to enable save button if text changed
-        binding.profileBody.profileEditName.addTextChangedListener(textWatcher);
-        binding.profileBody.profileEditAddress.addTextChangedListener(textWatcher);
-        binding.profileBody.profileEditCity.addTextChangedListener(textWatcher);
-        binding.profileBody.profileEditGender.addTextChangedListener(textWatcher);
-        binding.profileBody.profileEditEmail.addTextChangedListener(textWatcher);
-        binding.profileBody.profileEditMobile.addTextChangedListener(textWatcher);
+    private fun isDataChanged(): Boolean {
+        return !(viewModel.user.value?.name == binding.profileBody.profileEditName.text.toString()
+            .trim()
+                && viewModel.user.value?.address == binding.profileBody.profileEditAddress.text.toString()
+            .trim()
+                && viewModel.user.value?.city == binding.profileBody.profileEditCity.text.toString()
+            .trim()
+                && viewModel.user.value?.gender.toString() == binding.profileBody.profileEditGender.text.toString()
+            .trim()
+                && viewModel.user.value?.email == binding.profileBody.profileEditEmail.text.toString()
+            .trim()
+                && viewModel.user.value?.mobile == binding.profileBody.profileEditMobile.text.toString()
+            .trim()
+                )
     }
 
-    private boolean isDataChanged() {
-        return !(user.getName().equals(binding.profileBody.profileEditName.getText().toString().trim()) &&
-                user.getAddress().equals(binding.profileBody.profileEditAddress.getText().toString().trim()) &&
-                user.getCity().equals(binding.profileBody.profileEditCity.getText().toString().trim()) &&
-                String.valueOf(user.getGender()).equals(binding.profileBody.profileEditGender.getText().toString().trim()) &&
-                user.getEmail().equals(binding.profileBody.profileEditEmail.getText().toString().trim()) &&
-                user.getMobile().equals(binding.profileBody.profileEditMobile.getText().toString().trim())
-        );
-    }
+    override fun onClick(v: View) {
+        when (v) {
+            binding.profileImgBack -> requireActivity().onBackPressed()
+            binding.profileBtnSave -> {
+                viewModel.user.value?.name =
+                    binding.profileBody.profileEditName.text.toString().trim()
+                viewModel.user.value?.address =
+                    binding.profileBody.profileEditAddress.text.toString().trim()
+                viewModel.user.value?.city =
+                    binding.profileBody.profileEditCity.text.toString().trim()
+                viewModel.user.value?.gender =
+                    binding.profileBody.profileEditGender.text.toString().trim()
+                        .toInt()
+                viewModel.user.value?.email =
+                    binding.profileBody.profileEditEmail.text.toString().trim()
+                viewModel.user.value?.mobile =
+                    binding.profileBody.profileEditMobile.text.toString().trim()
+                firebaseAuth.currentUser?.let {
+                    viewModel.user.value?.let { it1 ->
+                        firestore.collection("users").document(it.uid).set(
+                            it1
+                        )
+                    }
+                }
+                Toasty.success(requireContext(), "Saved", Toasty.LENGTH_SHORT, true).show()
+                requireActivity().onBackPressed()
+            }
 
-    @Override
-    public void onClick(View v) {
-        if (v.equals(binding.profileImgBack)) {
-            activity.onBackPressed();
-
-        } else if (v.equals(binding.profileBtnSave)) {
-            user.setName(binding.profileBody.profileEditName.getText().toString().trim());
-            user.setAddress(binding.profileBody.profileEditAddress.getText().toString().trim());
-            user.setCity(binding.profileBody.profileEditCity.getText().toString().trim());
-            user.setGender(Integer.parseInt(binding.profileBody.profileEditGender.getText().toString().trim()));
-            user.setEmail(binding.profileBody.profileEditEmail.getText().toString().trim());
-            user.setMobile(binding.profileBody.profileEditMobile.getText().toString().trim());
-
-            firebaseFirestore.collection("users").document(firebaseUser.getUid()).set(user);
-            Toasty.success(activity, "Saved", Toasty.LENGTH_SHORT, true).show();
-            activity.onBackPressed();
         }
     }
 }
