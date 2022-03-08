@@ -40,6 +40,13 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
         getBestSellProducts()
     }
 
+    fun getData() {
+        getBanners()
+        getCategories()
+        getFeaturedProducts()
+        getBestSellProducts()
+    }
+
     private fun getUser() = viewModelScope.launch {
         _user.postValue(repository.getUser())
     }
@@ -63,6 +70,4 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     private fun getFavouriteProducts() = viewModelScope.launch {
         _favouriteProducts.postValue(repository.getFavouriteProducts())
     }
-
-
 }

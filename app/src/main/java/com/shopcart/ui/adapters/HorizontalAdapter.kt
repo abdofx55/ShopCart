@@ -10,7 +10,7 @@ import com.shopcart.data.models.Product
 import com.shopcart.databinding.HorizontalProductLayoutBinding
 import java.util.*
 
-class HorizontalAdapter(private val onClickListener: ProductsAdapter.OnClickListener) :
+class HorizontalAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Product, HorizontalAdapter.ViewHolder>(MyDiffUtil) {
 
     // DiffUtil is a utility class that calculates the difference between two lists

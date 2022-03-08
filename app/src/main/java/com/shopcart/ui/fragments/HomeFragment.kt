@@ -1,214 +1,207 @@
-package com.shopcart.ui.fragments;
+package com.shopcart.ui.fragments
 
+import android.os.Bundle
+import android.os.Handler
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.shopcart.R
+import com.shopcart.data.models.User
+import com.shopcart.databinding.FragmentHomeBinding
+import com.shopcart.ui.adapters.CategoriesAdapter
+import com.shopcart.ui.adapters.HorizontalAdapter
+import com.shopcart.ui.adapters.SliderAdapter
+import com.shopcart.ui.viewModels.MainViewModel
+import com.shopcart.utilities.Tasks.Companion.defaultNavigationBar
+import com.shopcart.utilities.Tasks.Companion.showSystemBars
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+@AndroidEntryPoint
+class HomeFragment : Fragment(), View.OnClickListener {
+    private lateinit var binding: FragmentHomeBinding
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.shopcart.R;
-import com.shopcart.data.Repository;
-import com.shopcart.data.models.User;
-import com.shopcart.databinding.FragmentHomeBinding;
-import com.shopcart.ui.adapters.CategoriesAdapter;
-import com.shopcart.ui.adapters.HorizontalAdapter;
-import com.shopcart.ui.adapters.SliderAdapter;
-import com.shopcart.utilities.Tasks;
+    @Inject
+    lateinit var firestore: FirebaseFirestore
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class HomeFragment extends Fragment implements View.OnClickListener {
-    FragmentHomeBinding binding;
-    FirebaseFirestore firebaseFirestore;
-    FirebaseStorage storage;
-    StorageReference bannersRef;
-    int sliderCurrentPage;
-    Runnable sliderRunnable;
-    Handler sliderHandler;
-    int sliderDelay = 4000;
-    private Activity activity;
-    private FragmentManager fragmentManager;
-    private FirebaseAuth mAuth;
-    private User user;
-    private SliderAdapter sliderAdapter;
-    private HorizontalAdapter featuredAdapter;
-    private HorizontalAdapter bestAdapter;
-    private CategoriesAdapter categoriesAdapter;
+    @Inject
+    lateinit var storage: FirebaseStorage
+    private val viewModel: MainViewModel by viewModels()
+    private var bannersRef: StorageReference? = null
+    private var sliderCurrentPage = 0
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    private var sliderHandler: Handler = Handler()
+    private lateinit var sliderRunnable: Runnable
+    private var sliderDelay = 4000
+    private var user: User? = null
+    private lateinit var sliderAdapter: SliderAdapter
+    private lateinit var featuredAdapter: HorizontalAdapter
+    private lateinit var bestAdapter: HorizontalAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
 
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-        if (isAdded()) {
-            activity = getActivity();
+        showSystemBars(requireActivity())
+        defaultNavigationBar(requireActivity())
+
+        user = viewModel.user.value
+        bannersRef = storage.reference.child("banners")
+
+        sliderAdapter = SliderAdapter()
+        featuredAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
+        bestAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
+        categoriesAdapter = CategoriesAdapter(CategoriesAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
+
+        binding.apply {
+            homeRecyclerFeatured.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            homeRecyclerBest.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            homeRecyclerCategories.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+            homePager.adapter = sliderAdapter
+            homeTabDots.setupWithViewPager(homePager, true)
+            homeRecyclerCategories.adapter = categoriesAdapter
+            homeRecyclerFeatured.adapter = featuredAdapter
+            homeRecyclerBest.adapter = bestAdapter
+
+            homePager.addOnPageChangeListener(object : OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    sliderCurrentPage = position
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {}
+            })
+
+            sliderRunnable = object : Runnable {
+                override fun run() {
+                    if (sliderCurrentPage == sliderAdapter.count - 1)
+                        sliderCurrentPage = 0 else sliderCurrentPage++
+
+                    homePager.currentItem = sliderCurrentPage
+                    sliderHandler.postDelayed(this, sliderDelay.toLong())
+                }
+            }
+
+
+//            button2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Tasks.deleteAccount(requireActivity() , firebaseAuth , firestore);
+//                }
+//            });
+
+            homeImgMenu.setOnClickListener(this@HomeFragment)
+            homeImgCart.setOnClickListener(this@HomeFragment)
+            homeTxtFeaturedMore.setOnClickListener(this@HomeFragment)
+            homeTxtBestMore.setOnClickListener(this@HomeFragment)
         }
 
-        Tasks.showSystemBars(activity);
-        Tasks.defaultNavigationBar(activity);
+        getData()
 
-        fragmentManager = getParentFragmentManager();
-        user = Repository.getUser();
-        mAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        bannersRef = storage.getReference().child("banners");
-
-        sliderHandler = new Handler();
-
-        LinearLayoutManager categoriesLayoutManager = new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false);
-        LinearLayoutManager featuredLayoutManager = new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false);
-        LinearLayoutManager bestLayoutManager = new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false);
-
-
-        binding.homeRecyclerFeatured.setLayoutManager(featuredLayoutManager);
-        binding.homeRecyclerBest.setLayoutManager(bestLayoutManager);
-        binding.homeRecyclerCategories.setLayoutManager(categoriesLayoutManager);
-
-        binding.homeImgMenu.setOnClickListener(this);
-        binding.homeImgCart.setOnClickListener(this);
-        binding.homeTxtFeaturedMore.setOnClickListener(this);
-        binding.homeTxtBestMore.setOnClickListener(this);
-
-        sliderAdapter = new SliderAdapter();
-        featuredAdapter = new HorizontalAdapter(activity);
-        bestAdapter = new HorizontalAdapter(activity);
-        categoriesAdapter = new CategoriesAdapter(activity);
-
-        binding.homePager.setAdapter(sliderAdapter);
-        binding.homeTabDots.setupWithViewPager(binding.homePager, true);
-        binding.homeRecyclerCategories.setAdapter(categoriesAdapter);
-        binding.homeRecyclerFeatured.setAdapter(featuredAdapter);
-        binding.homeRecyclerBest.setAdapter(bestAdapter);
-
-        getData();
-
-        binding.homePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                sliderCurrentPage = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
-        sliderRunnable = new Runnable() {
-            public void run() {
-                if (sliderCurrentPage == sliderAdapter.getCount() - 1)
-                    sliderCurrentPage = 0;
-                else
-                    sliderCurrentPage++;
-
-                binding.homePager.setCurrentItem(sliderCurrentPage);
-                sliderHandler.postDelayed(this, sliderDelay);
-            }
-        };
-
-
-//        binding.button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Tasks.deleteAccount(activity , mAuth , firebaseFirestore);
-//            }
-//        });
-
-
-        return binding.getRoot();
+        return binding.root
     }
 
-    private void getData() {
-        sliderAdapter.setList(Repository.getBanners());
-        categoriesAdapter.setList(Repository.getCategories());
-        featuredAdapter.setList(Repository.getFeaturedProducts());
-        bestAdapter.setList(Repository.getBestSellProducts());
+    private fun getData() {
+        sliderAdapter.setList(viewModel.banners.value)
+        categoriesAdapter.submitList(viewModel.categories.value)
+        featuredAdapter.submitList(viewModel.featuredProducts.value)
+        bestAdapter.submitList(viewModel.bestSellProducts.value)
     }
 
-    @Override
-    public void onClick(View v) {
+    override fun onClick(v: View) {
+        when (v) {
+            binding.homeImgMenu -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToMenuFragment()
+                val navController = NavHostFragment.findNavController(this)
+                val navDestination = navController.currentDestination
+                if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
+                    action
+                )
+            }
 
-        if (binding.homeImgMenu.equals(v)) {
-            NavDirections action = HomeFragmentDirections.actionHomeFragmentToMenuFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
-                navController.navigate(action);
+            binding.homeTxtFeaturedMore -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToFeaturedFragment()
+                val navController = NavHostFragment.findNavController(this)
+                val navDestination = navController.currentDestination
+                if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
+                    action
+                )
+            }
 
-        } else if (binding.homeTxtFeaturedMore.equals(v)) {
-            NavDirections action = HomeFragmentDirections.actionHomeFragmentToFeaturedFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
-                navController.navigate(action);
+            binding.homeTxtBestMore -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToBestSellFragment()
+                val navController = NavHostFragment.findNavController(this)
+                val navDestination = navController.currentDestination
+                if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
+                    action
+                )
+            }
 
-        } else if (binding.homeTxtBestMore.equals(v)) {
-            NavDirections action = HomeFragmentDirections.actionHomeFragmentToBestSellFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
-                navController.navigate(action);
+            binding.homeImgCart -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
+                val navController = NavHostFragment.findNavController(this)
+                val navDestination = navController.currentDestination
+                if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
+                    action
+                )
+            }
 
-        } else if (binding.homeImgCart.equals(v)) {
-            NavDirections action = HomeFragmentDirections.actionHomeFragmentToCartFragment();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
-                navController.navigate(action);
-
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkIfSignedIn();
-        sliderHandler.postDelayed(sliderRunnable, sliderDelay);
-    }
-
-    private void checkIfSignedIn() {
-        if (mAuth == null || mAuth.getCurrentUser() == null) {
-            NavDirections action = HomeFragmentDirections.actionHomeFragmentToEntryFragments();
-            NavController navController = NavHostFragment.findNavController(this);
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null && navDestination.getId() == R.id.homeFragment)
-                navController.navigate(action);
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        sliderHandler.removeCallbacks(sliderRunnable);
+    override fun onResume() {
+        super.onResume()
+        checkIfSignedIn()
+        sliderHandler.postDelayed(sliderRunnable, sliderDelay.toLong())
     }
 
+    private fun checkIfSignedIn() {
+        if (firebaseAuth.currentUser == null) {
+            val action = HomeFragmentDirections.actionHomeFragmentToEntryFragments()
+            val navController = NavHostFragment.findNavController(this)
+            val navDestination = navController.currentDestination
+            if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
+                action
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sliderHandler.removeCallbacks(sliderRunnable)
+    }
 }

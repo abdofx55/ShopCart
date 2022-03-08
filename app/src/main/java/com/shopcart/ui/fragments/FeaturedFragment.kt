@@ -25,6 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeaturedFragment : Fragment() {
     private lateinit var binding: FragmentFeaturedBinding
+
     @Inject
     lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: ProductsAdapter
