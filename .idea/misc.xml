@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.158" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/drawable/ic_logo.xml" value="0.158" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/drawable/ic_name.xml" value="0.152" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/drawable/ic_shopping_cart_svgrepo_com.xml" value="0.158" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/activity_main.xml" value="0.11354166666666667" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/category_layout.xml" value="0.17708333333333334" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_address.xml" value="0.14947916666666666" />
@@ -13,14 +17,18 @@
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_login.xml" value="0.2223731884057971" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_menu.xml" value="0.2109375" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_my_orders.xml" value="0.14947916666666666" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_on_boarding.xml" value="0.2223731884057971" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_payment.xml" value="0.2223731884057971" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_sign_up.xml" value="0.12360688956433637" />
-        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_splash_screen.xml" value="0.136" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_splash_screen.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/fragment_test.xml" value="0.2223731884057971" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/horizontal_product_layout.xml" value="0.17708333333333334" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/item_on_boarding.xml" value="0.17708333333333334" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/item_product.xml" value="0.1598731884057971" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/slider_layout.xml" value="0.18697916666666667" />
         <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/layout/vertical_product_layout.xml" value="0.17708333333333334" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.158" />
+        <entry key="..\:/AndroidStudioProjects/ShopCart/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.158" />
       </map>
     </option>
   </component>

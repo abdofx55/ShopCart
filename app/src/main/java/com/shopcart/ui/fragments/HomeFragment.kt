@@ -2,6 +2,7 @@ package com.shopcart.ui.fragments
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,42 +13,19 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.shopcart.R
-import com.shopcart.data.models.User
 import com.shopcart.databinding.FragmentHomeBinding
 import com.shopcart.ui.adapters.CategoriesAdapter
 import com.shopcart.ui.adapters.HorizontalAdapter
 import com.shopcart.ui.adapters.SliderAdapter
 import com.shopcart.ui.viewModels.MainViewModel
-import com.shopcart.utilities.Tasks.Companion.defaultNavigationBar
-import com.shopcart.utilities.Tasks.Companion.showSystemBars
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import com.shopcart.utilities.Constants
 
-@AndroidEntryPoint
 class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentHomeBinding
 
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
-
-    @Inject
-    lateinit var firestore: FirebaseFirestore
-
-    @Inject
-    lateinit var storage: FirebaseStorage
     private val viewModel: MainViewModel by viewModels()
-    private var bannersRef: StorageReference? = null
-    private var sliderCurrentPage = 0
 
-    private var sliderHandler: Handler = Handler()
-    private lateinit var sliderRunnable: Runnable
-    private var sliderDelay = 4000
-    private var user: User? = null
     private lateinit var sliderAdapter: SliderAdapter
     private lateinit var featuredAdapter: HorizontalAdapter
     private lateinit var bestAdapter: HorizontalAdapter
@@ -60,22 +38,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-        showSystemBars(requireActivity())
-        defaultNavigationBar(requireActivity())
+        checkOnBoardingState()
+        checkAuthenticationState()
 
-        user = viewModel.user.value
-        bannersRef = storage.reference.child("banners")
-
-        sliderAdapter = SliderAdapter()
-        featuredAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
-            // TODO item click listener
-        })
-        bestAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
-            // TODO item click listener
-        })
-        categoriesAdapter = CategoriesAdapter(CategoriesAdapter.OnClickListener { position, item ->
-            // TODO item click listener
-        })
+        setupAdapters()
 
         binding.apply {
             homeRecyclerFeatured.layoutManager =
@@ -100,21 +66,21 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 }
 
                 override fun onPageSelected(position: Int) {
-                    sliderCurrentPage = position
+                    viewModel.sliderCurrentPage = position
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {}
             })
 
-            sliderRunnable = object : Runnable {
-                override fun run() {
-                    if (sliderCurrentPage == sliderAdapter.count - 1)
-                        sliderCurrentPage = 0 else sliderCurrentPage++
+            Handler(Looper.getMainLooper()).postDelayed({
+                // check for last item
+                if (viewModel.sliderCurrentPage == sliderAdapter.count - 1)
+                    viewModel.sliderCurrentPage = 0
+                else viewModel.sliderCurrentPage++
 
-                    homePager.currentItem = sliderCurrentPage
-                    sliderHandler.postDelayed(this, sliderDelay.toLong())
-                }
-            }
+                homePager.currentItem = viewModel.sliderCurrentPage
+
+            }, Constants.HOME_SLIDER_DELAY)
 
 
 //            button2.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +99,19 @@ class HomeFragment : Fragment(), View.OnClickListener {
         getData()
 
         return binding.root
+    }
+
+    private fun setupAdapters() {
+        sliderAdapter = SliderAdapter()
+        featuredAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
+        bestAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
+        categoriesAdapter = CategoriesAdapter(CategoriesAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
     }
 
     private fun getData() {
@@ -183,25 +162,42 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkIfSignedIn()
-        sliderHandler.postDelayed(sliderRunnable, sliderDelay.toLong())
-    }
-
-    private fun checkIfSignedIn() {
-        if (firebaseAuth.currentUser == null) {
-            val action = HomeFragmentDirections.actionHomeFragmentToEntryFragments()
-            val navController = NavHostFragment.findNavController(this)
-            val navDestination = navController.currentDestination
-            if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
-                action
-            )
+    private fun checkOnBoardingState() {
+        // Check if we need to display our OnBoarding Fragment
+        if (!viewModel.onBoardingState) {
+            // The user hasn't seen the OnBoardingFragment yet, so show it
+            openOnBoardingFragment()
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        sliderHandler.removeCallbacks(sliderRunnable)
+    private fun checkAuthenticationState() {
+        // Check if the user didn't sign in
+        if (viewModel.firebaseAuth.currentUser == null ||
+            viewModel.firebaseAuth.currentUser?.isEmailVerified == false
+        ) {
+            // The user hasn't signed in , so WelcomeFragment
+            openWelcomeFragment()
+
+        }
+    }
+
+    private fun openWelcomeFragment() {
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToEntryFragments()
+        val navController = NavHostFragment.findNavController(this)
+        val navDestination = navController.currentDestination
+        if (navDestination != null && navDestination.id == R.id.home) navController.navigate(
+            action
+        )
+    }
+
+    private fun openOnBoardingFragment() {
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToOnBoardingFragment()
+        val navController = NavHostFragment.findNavController(this)
+        val navDestination = navController.currentDestination
+        if (navDestination != null && navDestination.id == R.id.home) navController.navigate(
+            action
+        )
     }
 }

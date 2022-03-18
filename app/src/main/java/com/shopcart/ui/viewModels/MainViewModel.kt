@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.shopcart.data.Repository
 import com.shopcart.data.models.Banner
 import com.shopcart.data.models.Category
@@ -14,7 +17,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val repository: Repository,
+    val firebaseAuth: FirebaseAuth,
+    val fireStore: FirebaseFirestore,
+    val storage: FirebaseStorage
+) : ViewModel() {
+
+    var onBoardingState: Boolean = false
+        get() {
+            field = repository.onBoardingState
+            return field
+        }
+        set(value) {
+            field = value
+            repository.onBoardingState = value
+        }
+
+    var sliderCurrentPage = 0
+
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
 
@@ -34,10 +55,7 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val favouriteProducts: LiveData<ArrayList<Product>> = _favouriteProducts
 
     init {
-        getBanners()
-        getCategories()
-        getFeaturedProducts()
-        getBestSellProducts()
+        getData()
     }
 
     fun getData() {

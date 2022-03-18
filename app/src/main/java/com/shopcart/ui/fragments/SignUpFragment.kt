@@ -92,7 +92,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                     updateUIWhenSigning(RESET_UI_WHEN_SIGNING_FAILED)
                     Toasty.error(
                         requireContext(),
-                        e.localizedMessage,
+                        "${e.localizedMessage} ",
                         Toast.LENGTH_LONG,
                         true
                     ).show()

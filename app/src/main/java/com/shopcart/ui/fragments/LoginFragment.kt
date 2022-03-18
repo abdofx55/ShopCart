@@ -2,6 +2,7 @@ package com.shopcart.ui.fragments
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.shopcart.R
-import com.shopcart.data.Repository
 import com.shopcart.databinding.FragmentLoginBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
@@ -55,7 +55,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 // first check is network connected
                 if (isConnected(activity!!)) {
                     updateUIWhenLogging(UPDATE_UI_WHEN_LOGGING)
-                    Handler().postDelayed({ login() }, 300)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        // Log in
+                        login()
+                    }, 300)
                 } else Toasty.warning(
                     activity!!,
                     getString(R.string.no_internet),
@@ -95,31 +98,14 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         if (it.isEmailVerified) {
                             // Sign in success, Download Data then update UI with the signed-in user's information1
                             viewModel.getData()
+                            Toasty.success(
+                                requireContext(),
+                                getString(R.string.login_toast_login_success),
+                                Toast.LENGTH_SHORT,
+                                true
+                            ).show()
+                            openHomeFragment()
 
-
-                            val handler = Handler()
-                            val runnable: Runnable = object : Runnable {
-                                override fun run() {
-                                    if (Repository.isDataDownloaded()) {
-                                        handler.removeCallbacks(this)
-                                        Toasty.success(
-                                            activity!!,
-                                            getString(R.string.login_toast_login_success),
-                                            Toast.LENGTH_SHORT,
-                                            true
-                                        ).show()
-                                        val action =
-                                            LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-                                        val navController =
-                                            NavHostFragment.findNavController(this@LoginFragment)
-                                        val navDestination = navController.currentDestination
-                                        if (navDestination != null && navDestination.id == R.id.loginFragment) navController.navigate(
-                                            action
-                                        )
-                                    } else handler.postDelayed(this, 50)
-                                }
-                            }
-                            handler.postDelayed(runnable, 0)
                         } else {
                             updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED)
                             Toasty.info(
@@ -136,14 +122,25 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 if (isAdded) {
                     // If sign in fails, display a message to the user.
                     updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED)
-                    if (e.localizedMessage != null) Toasty.error(
-                        activity!!,
-                        e.localizedMessage,
+                    Toasty.error(
+                        requireContext(),
+                        "${e.localizedMessage} ",
                         Toast.LENGTH_LONG,
                         true
                     ).show()
                 }
             }
+    }
+
+    private fun openHomeFragment() {
+        val action =
+            LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+        val navController =
+            NavHostFragment.findNavController(this@LoginFragment)
+        val navDestination = navController.currentDestination
+        if (navDestination != null && navDestination.id == R.id.loginFragment) navController.navigate(
+            action
+        )
     }
 
     private fun updateUIWhenLogging(flag: Int) {
