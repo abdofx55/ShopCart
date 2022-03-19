@@ -11,21 +11,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.auth.FirebaseAuth
 import com.shopcart.R
 import com.shopcart.databinding.FragmentLoginBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentLoginBinding
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -88,7 +83,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun login() {
-        firebaseAuth.signInWithEmailAndPassword(
+        viewModel.firebaseAuth.signInWithEmailAndPassword(
             binding.loginLayoutBody.loginEditEmail.text.toString().trim(),
             binding.loginLayoutBody.loginEditPassword.text.toString().trim()
         )

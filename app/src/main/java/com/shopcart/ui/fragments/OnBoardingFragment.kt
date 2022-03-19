@@ -6,21 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.shopcart.R
 import com.shopcart.databinding.FragmentOnBoardingBinding
 import com.shopcart.ui.adapters.OnBoardingPagerAdapter
-import com.shopcart.utilities.Constants
+import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.Tasks.Companion.defaultNavigationBar
 import com.shopcart.utilities.Tasks.Companion.hideSystemBars
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OnBoardingFragment : Fragment(), View.OnClickListener {
-    var currentPage = 0
     private lateinit var binding: FragmentOnBoardingBinding
     private lateinit var onBoardingPagerAdapter: OnBoardingPagerAdapter
+    private val viewModel: MainViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -32,11 +33,13 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
 
         hideSystemBars(requireActivity())
         defaultNavigationBar(requireActivity())
+
         onBoardingPagerAdapter = OnBoardingPagerAdapter()
 
         binding.apply {
-            onboardingPager.adapter = onBoardingPagerAdapter
             onboardingTabDots.setupWithViewPager(binding.onboardingPager, true)
+            onboardingPager.adapter = onBoardingPagerAdapter
+            onboardingPager.currentItem = viewModel.onBoardingCurrentPage
 
             onboardingPager.addOnPageChangeListener(object : OnPageChangeListener {
                 override fun onPageScrolled(
@@ -73,12 +76,12 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
         when (v) {
             binding.onboardingBtnSkip, binding.onboardingBtnFinish -> {
                 openWelcomeFragment()
-                // register that user has seen OnBoardingActivity activity
-                registerOnBoardingState()
+                // register that user has seen OnBoarding Fragment
+                viewModel.onBoardingState = true
             }
 
-            binding.onboardingImgNext -> if (currentPage < onBoardingPagerAdapter.count) {
-                binding.onboardingPager.currentItem = ++currentPage
+            binding.onboardingImgNext -> if (viewModel.onBoardingCurrentPage < onBoardingPagerAdapter.count) {
+                binding.onboardingPager.currentItem = ++viewModel.onBoardingCurrentPage
             }
         }
     }
@@ -91,11 +94,5 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
         if (navDestination != null && navDestination.id == R.id.onBoardingFragment) navController.navigate(
             action
         )
-    }
-
-    private fun registerOnBoardingState() {
-        // register that user has seen OnBoardingActivity activity
-        PreferenceManager.getDefaultSharedPreferences(activity!!).edit()
-            .putBoolean(Constants.ON_BOARDING_STATE_KEY, true).apply()
     }
 }

@@ -34,6 +34,7 @@ class MainViewModel @Inject constructor(
             repository.onBoardingState = value
         }
 
+    var onBoardingCurrentPage = 0
     var sliderCurrentPage = 0
 
     private val _user = MutableLiveData<User>()
@@ -61,8 +62,8 @@ class MainViewModel @Inject constructor(
     fun getData() {
         getBanners()
         getCategories()
-        getFeaturedProducts()
-        getBestSellProducts()
+//        getFeaturedProducts()
+//        getBestSellProducts()
     }
 
     private fun getUser() = viewModelScope.launch {

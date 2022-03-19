@@ -6,20 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.auth.FirebaseAuth
 import com.shopcart.R
 import com.shopcart.databinding.FragmentMenuBinding
+import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.Tasks.Companion.signOut
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MenuFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentMenuBinding
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,7 +100,7 @@ class MenuFragment : Fragment(), View.OnClickListener {
             }
 
             binding.menuImgClose -> {
-                signOut(requireActivity(), firebaseAuth)
+                signOut(requireActivity(), viewModel.firebaseAuth)
                 requireActivity().onBackPressed()
             }
 

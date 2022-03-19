@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.firestore.FirebaseFirestore
 import com.shopcart.R
 import com.shopcart.databinding.FragmentFeaturedBinding
 import com.shopcart.ui.adapters.ProductsAdapter
@@ -16,7 +15,6 @@ import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.VisualUtils.SpacingItemDecoration
 import com.shopcart.utilities.VisualUtils.calculateNoOfColumns
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -25,9 +23,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeaturedFragment : Fragment() {
     private lateinit var binding: FragmentFeaturedBinding
-
-    @Inject
-    lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: ProductsAdapter
     private val viewModel: MainViewModel by viewModels()
 
@@ -46,21 +41,21 @@ class FeaturedFragment : Fragment() {
 
         binding.apply {
             featuredRecycler.layoutManager = GridLayoutManager(
-                activity, calculateNoOfColumns(
-                    activity!!, 180f, 8
+                requireContext(), calculateNoOfColumns(
+                    requireContext(), 180f, 8
                 )
             )
 
             featuredRecycler.addItemDecoration(
                 SpacingItemDecoration(
                     resources.getDimensionPixelSize(R.dimen.grid_spacing),
-                    calculateNoOfColumns(activity!!, 180f, 8)
+                    calculateNoOfColumns(requireContext(), 180f, 8)
                 )
             )
 
             featuredRecycler.adapter = adapter
 
-            featuredImgBack.setOnClickListener { activity!!.onBackPressed() }
+            featuredImgBack.setOnClickListener { requireActivity().onBackPressed() }
         }
 
         return binding.root

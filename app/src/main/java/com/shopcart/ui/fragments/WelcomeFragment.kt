@@ -15,6 +15,7 @@ import com.shopcart.utilities.Tasks.Companion.showSystemBars
 class WelcomeFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentWelcomeBinding
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

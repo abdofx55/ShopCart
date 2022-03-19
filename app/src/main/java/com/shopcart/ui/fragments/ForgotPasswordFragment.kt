@@ -8,20 +8,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
+import androidx.fragment.app.viewModels
 import com.shopcart.R
 import com.shopcart.databinding.FragmentForgotPasswordBinding
+import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentForgotPasswordBinding
+    private val viewModel: MainViewModel by viewModels()
 
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
 
     companion object {
         // Flags to update UI
@@ -66,7 +65,9 @@ class ForgotPasswordFragment : Fragment(), View.OnClickListener {
     }
 
     private fun reset() {
-        firebaseAuth.sendPasswordResetEmail(binding.forgotEditEmail.text.toString().trim())
+        viewModel.firebaseAuth.sendPasswordResetEmail(
+            binding.forgotEditEmail.text.toString().trim()
+        )
             .addOnSuccessListener {
                 if (isAdded) {
                     Toasty.success(

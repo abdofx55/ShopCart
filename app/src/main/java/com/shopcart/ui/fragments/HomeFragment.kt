@@ -20,10 +20,11 @@ import com.shopcart.ui.adapters.HorizontalAdapter
 import com.shopcart.ui.adapters.SliderAdapter
 import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentHomeBinding
-
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var sliderAdapter: SliderAdapter
@@ -117,8 +118,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private fun getData() {
         sliderAdapter.setList(viewModel.banners.value)
         categoriesAdapter.submitList(viewModel.categories.value)
-        featuredAdapter.submitList(viewModel.featuredProducts.value)
-        bestAdapter.submitList(viewModel.bestSellProducts.value)
+//        featuredAdapter.submitList(viewModel.featuredProducts.value)
+//        bestAdapter.submitList(viewModel.bestSellProducts.value)
     }
 
     override fun onClick(v: View) {

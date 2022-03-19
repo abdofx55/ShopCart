@@ -7,27 +7,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.shopcart.R
 import com.shopcart.data.models.User
 import com.shopcart.databinding.FragmentSignUpBinding
+import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentSignUpBinding
+    private val viewModel: MainViewModel by viewModels()
 
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
-
-    @Inject
-    lateinit var fireStore: FirebaseFirestore
 
     companion object {
         // Flags to update UI
@@ -78,7 +73,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     }
 
     private fun signUp() {
-        firebaseAuth.createUserWithEmailAndPassword(
+        viewModel.firebaseAuth.createUserWithEmailAndPassword(
             binding.signLayoutBody.signEditEmail.text.toString().trim { it <= ' ' },
             binding.signLayoutBody.signEditPassword.text.toString().trim { it <= ' ' })
             .addOnSuccessListener {
@@ -123,7 +118,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             newUser.name = binding.signLayoutBody.signEditName.text.toString().trim { it <= ' ' }
 
             // Add a new document with a user ID
-            fireStore.collection("users").document(user.uid).set(newUser)
+            viewModel.fireStore.collection("users").document(user.uid).set(newUser)
                 .addOnSuccessListener {
                     if (isAdded) {
                         Toasty.success(

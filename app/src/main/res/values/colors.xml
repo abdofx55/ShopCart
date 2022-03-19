@@ -19,7 +19,6 @@
     <color name="primaryText">#323232</color>
     <color name="secondaryText">#434343</color>
     <color name="third_color">#818181</color>
-    <color name="blue_color">#818181</color>
 
     <color name="divider_color">#D8D8D8</color>
 
@@ -29,12 +28,6 @@
 
 
     <!--Toasty Colors-->
-    <color name="defaultTextColor">#FFFFFF</color>
-    <color name="errorColor">@color/primaryText</color>
-    <color name="infoColor">@color/secondaryText</color>
-    <color name="successColor">@color/secondaryText</color>
-    <color name="warningColor">@color/primaryText</color>
-    <color name="normalColor">#353A3E</color>
 
 
 </resources>

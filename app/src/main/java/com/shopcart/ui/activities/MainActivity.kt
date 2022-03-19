@@ -4,22 +4,20 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.databinding.DataBindingUtil
 import com.shopcart.R
-import com.shopcart.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Handle the splash screen transition.
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         initializeToasty()
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
     // Configure some Toasty parameters

@@ -9,26 +9,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.shopcart.R
 import com.shopcart.data.models.User
 import com.shopcart.databinding.FragmentProfileBinding
 import com.shopcart.ui.viewModels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
-import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- */
+@AndroidEntryPoint
 class ProfileFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentProfileBinding
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
-
-    @Inject
-    lateinit var firestore: FirebaseFirestore
     private val viewModel: MainViewModel by viewModels()
 
     private val textWatcher: TextWatcher = object : TextWatcher {
@@ -114,9 +104,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     binding.profileBody.profileEditEmail.text.toString().trim()
                 viewModel.user.value?.mobile =
                     binding.profileBody.profileEditMobile.text.toString().trim()
-                firebaseAuth.currentUser?.let {
+
+                viewModel.firebaseAuth.currentUser?.let {
                     viewModel.user.value?.let { it1 ->
-                        firestore.collection("users").document(it.uid).set(
+                        viewModel.fireStore.collection("users").document(it.uid).set(
                             it1
                         )
                     }
