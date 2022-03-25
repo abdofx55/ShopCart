@@ -12,6 +12,8 @@ import com.shopcart.databinding.FragmentSettingsBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Settings Fragment"
+
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding

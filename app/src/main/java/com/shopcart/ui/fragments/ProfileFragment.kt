@@ -3,21 +3,26 @@ package com.shopcart.ui.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.shopcart.R
 import com.shopcart.data.models.User
 import com.shopcart.databinding.FragmentProfileBinding
 import com.shopcart.ui.viewModels.MainViewModel
+import com.shopcart.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(), View.OnClickListener {
+    private val TAG = ProfileFragment::class.java.name
+
     private lateinit var binding: FragmentProfileBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -38,8 +43,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
 
-        getUserProfile()
-
         binding.apply {
             profileImgBack.setOnClickListener(this@ProfileFragment)
             profileBtnSave.setOnClickListener(this@ProfileFragment)
@@ -48,8 +51,28 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    private fun getUserProfile() {
-        viewModel.user.value?.let { updateUi(it) }
+    override fun onStart() {
+        super.onStart()
+        getProfile()
+    }
+
+    private fun getProfile() {
+        viewModel.profile.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    Log.d(TAG, "Loading")
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    updateUi(it.data!!)
+                }
+
+                is Resource.Error -> {
+                    Log.d(TAG, it.message!!)
+                }
+            }
+        })
     }
 
     private fun updateUi(user: User) {
@@ -72,17 +95,17 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun isDataChanged(): Boolean {
-        return !(viewModel.user.value?.name == binding.profileBody.profileEditName.text.toString()
+        return !(viewModel.profile.value?.data?.name == binding.profileBody.profileEditName.text.toString()
             .trim()
-                && viewModel.user.value?.address == binding.profileBody.profileEditAddress.text.toString()
+                && viewModel.profile.value?.data?.address == binding.profileBody.profileEditAddress.text.toString()
             .trim()
-                && viewModel.user.value?.city == binding.profileBody.profileEditCity.text.toString()
+                && viewModel.profile.value?.data?.city == binding.profileBody.profileEditCity.text.toString()
             .trim()
-                && viewModel.user.value?.gender.toString() == binding.profileBody.profileEditGender.text.toString()
+                && viewModel.profile.value?.data?.gender.toString() == binding.profileBody.profileEditGender.text.toString()
             .trim()
-                && viewModel.user.value?.email == binding.profileBody.profileEditEmail.text.toString()
+                && viewModel.profile.value?.data?.email == binding.profileBody.profileEditEmail.text.toString()
             .trim()
-                && viewModel.user.value?.mobile == binding.profileBody.profileEditMobile.text.toString()
+                && viewModel.profile.value?.data?.mobile == binding.profileBody.profileEditMobile.text.toString()
             .trim()
                 )
     }
@@ -91,22 +114,22 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         when (v) {
             binding.profileImgBack -> requireActivity().onBackPressed()
             binding.profileBtnSave -> {
-                viewModel.user.value?.name =
+                viewModel.profile.value?.data?.name =
                     binding.profileBody.profileEditName.text.toString().trim()
-                viewModel.user.value?.address =
+                viewModel.profile.value?.data?.address =
                     binding.profileBody.profileEditAddress.text.toString().trim()
-                viewModel.user.value?.city =
+                viewModel.profile.value?.data?.city =
                     binding.profileBody.profileEditCity.text.toString().trim()
-                viewModel.user.value?.gender =
+                viewModel.profile.value?.data?.gender =
                     binding.profileBody.profileEditGender.text.toString().trim()
                         .toInt()
-                viewModel.user.value?.email =
+                viewModel.profile.value?.data?.email =
                     binding.profileBody.profileEditEmail.text.toString().trim()
-                viewModel.user.value?.mobile =
+                viewModel.profile.value?.data?.mobile =
                     binding.profileBody.profileEditMobile.text.toString().trim()
 
                 viewModel.firebaseAuth.currentUser?.let {
-                    viewModel.user.value?.let { it1 ->
+                    viewModel.profile.value?.let { it1 ->
                         viewModel.fireStore.collection("users").document(it.uid).set(
                             it1
                         )

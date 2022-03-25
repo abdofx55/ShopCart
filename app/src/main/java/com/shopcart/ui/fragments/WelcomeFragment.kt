@@ -12,6 +12,8 @@ import com.shopcart.databinding.FragmentWelcomeBinding
 import com.shopcart.utilities.Tasks.Companion.defaultNavigationBar
 import com.shopcart.utilities.Tasks.Companion.showSystemBars
 
+private const val TAG = "Welcome Fragment"
+
 class WelcomeFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentWelcomeBinding
 

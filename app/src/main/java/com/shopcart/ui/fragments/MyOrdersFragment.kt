@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyOrdersFragment : Fragment() {
+    private val TAG = MyOrdersFragment::class.java.name
+
     private lateinit var binding: FragmentMyOrdersBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -24,6 +26,8 @@ class MyOrdersFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_orders, container, false)
+
+        binding.ordersImgBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
 }

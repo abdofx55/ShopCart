@@ -12,6 +12,8 @@ import com.shopcart.databinding.FragmentCreateAddressBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Create Address Fragment"
+
 @AndroidEntryPoint
 class CreateAddressFragment : Fragment() {
     private lateinit var binding: FragmentCreateAddressBinding

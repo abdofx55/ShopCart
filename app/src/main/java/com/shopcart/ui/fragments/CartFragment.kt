@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
+    private val TAG = CartFragment::class.java.name
+
     private lateinit var binding: FragmentCartBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -24,6 +26,9 @@ class CartFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container, false)
+
+        binding.featuredImgBack.setOnClickListener { requireActivity().onBackPressed() }
+
         return binding.root
     }
 }

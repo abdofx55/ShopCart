@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import com.shopcart.R
 import com.shopcart.databinding.FragmentCheckoutBinding
 
+private const val TAG = "Checkout Fragment"
+
 class CheckoutFragment : Fragment() {
     private lateinit var binding: FragmentCheckoutBinding
 

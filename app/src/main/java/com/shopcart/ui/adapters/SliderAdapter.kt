@@ -1,45 +1,51 @@
 package com.shopcart.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shopcart.data.models.Banner
 import com.shopcart.databinding.SliderLayoutBinding
 
-class SliderAdapter : PagerAdapter() {
-    private var list: ArrayList<Banner>? = null
+class SliderAdapter : ListAdapter<Banner, SliderAdapter.ViewHolder>(MyDiffUtil) {
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view === `object`
-    }
+    // DiffUtil is a utility class that calculates the difference between two lists
+    // and outputs a list of update operations that converts the first list into the second one.
+    companion object MyDiffUtil : DiffUtil.ItemCallback<Banner>() {
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val binding =
-            SliderLayoutBinding.inflate(LayoutInflater.from(container.context), container, false)
 
-        list?.let {
-            if (it.isNotEmpty())
-                Glide.with(container.context).load(list?.get(position)?.photoUrl)
-                    .into(binding.sliderImg)
+        // Checks if the two objects are the same
+        override fun areItemsTheSame(oldItem: Banner, newItem: Banner): Boolean {
+            return oldItem == newItem
         }
 
-        container.addView(binding.root, position)
+        // Checks if the data between the two objects is the same
+        override fun areContentsTheSame(oldItem: Banner, newItem: Banner): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        return binding.root
     }
 
-    fun setList(list: ArrayList<Banner>?) {
-        this.list = list
-        notifyDataSetChanged()
+    // Holds the views for adding it to image and text
+    inner class ViewHolder(val binding: SliderLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(position: Int) {
+            Glide.with(binding.root.context).load(currentList[position].photoUrl)
+                .into(binding.sliderImg)
+        }
     }
 
-    override fun getCount(): Int {
-        return list?.size ?: 0
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding =
+            SliderLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return ViewHolder(binding)
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(position)
     }
 }

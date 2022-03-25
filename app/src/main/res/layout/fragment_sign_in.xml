@@ -80,9 +80,9 @@
             android:layout_marginRight="72dp"
             android:visibility="invisible"
             app:SpinKit_Color="@android:color/white"
-            app:layout_constraintBottom_toTopOf="@+id/login_btn_login"
+            app:layout_constraintBottom_toBottomOf="@+id/login_btn_login"
             app:layout_constraintEnd_toEndOf="@+id/login_btn_login"
-            app:layout_constraintTop_toBottomOf="@+id/login_btn_login"
+            app:layout_constraintTop_toTopOf="@+id/login_btn_login"
             app:layout_constraintVertical_bias="0.47" />
 
         <Button

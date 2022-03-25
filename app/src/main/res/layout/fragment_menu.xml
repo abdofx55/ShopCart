@@ -13,73 +13,83 @@
         android:background="@android:color/white"
         tools:context=".ui.fragments.MenuFragment">
 
-        <Button
-            android:id="@+id/menu_btn_home"
-            style="@style/menu_button"
-            android:text="@string/menu_home"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/menu_btn_profile"
-            style="@style/menu_button"
-            android:text="@string/menu_profile"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_home"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_home"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_home" />
+            <Button
+                android:id="@+id/menu_btn_home"
+                style="@style/menu_button"
+                android:text="@string/menu_home"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.2" />
 
-        <Button
-            android:id="@+id/menu_btn_cart"
-            style="@style/menu_button"
-            android:text="@string/menu_cart"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_profile"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_profile"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_profile" />
+            <Button
+                android:id="@+id/menu_btn_profile"
+                style="@style/menu_button"
+                android:text="@string/menu_profile"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_home"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_home"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_home" />
 
-        <Button
-            android:id="@+id/menu_btn_favourite"
-            style="@style/menu_button"
-            android:text="@string/menu_favourite"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_cart"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_cart"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_cart" />
+            <Button
+                android:id="@+id/menu_btn_cart"
+                style="@style/menu_button"
+                android:text="@string/menu_cart"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_profile"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_profile"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_profile" />
 
-        <Button
-            android:id="@+id/menu_btn_orders"
-            style="@style/menu_button"
-            android:text="@string/menu_orders"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_favourite"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_favourite"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_favourite" />
+            <Button
+                android:id="@+id/menu_btn_favourite"
+                style="@style/menu_button"
+                android:text="@string/menu_favourite"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_cart"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_cart"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_cart" />
 
-        <Button
-            android:id="@+id/menu_btn_language"
-            style="@style/menu_button"
-            android:text="@string/menu_language"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_orders"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_orders"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_orders" />
+            <Button
+                android:id="@+id/menu_btn_orders"
+                style="@style/menu_button"
+                android:text="@string/menu_orders"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_favourite"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_favourite"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_favourite" />
 
-        <Button
-            android:id="@+id/menu_btn_settings"
-            style="@style/menu_button"
-            android:text="@string/menu_settings"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_language"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_language"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_language" />
+            <Button
+                android:id="@+id/menu_btn_language"
+                style="@style/menu_button"
+                android:text="@string/menu_language"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_orders"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_orders"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_orders" />
 
-        <Button
-            android:id="@+id/menu_btn_sign_out"
-            style="@style/menu_button"
-            android:text="@string/menu_sign_out"
-            app:layout_constraintEnd_toStartOf="@+id/menu_btn_settings"
-            app:layout_constraintStart_toEndOf="@+id/menu_btn_settings"
-            app:layout_constraintTop_toBottomOf="@+id/menu_btn_settings" />
+            <Button
+                android:id="@+id/menu_btn_settings"
+                style="@style/menu_button"
+                android:text="@string/menu_settings"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_language"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_language"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_language" />
 
+            <Button
+                android:id="@+id/menu_btn_sign_out"
+                style="@style/menu_button"
+                android:text="@string/menu_sign_out"
+                app:layout_constraintEnd_toStartOf="@+id/menu_btn_settings"
+                app:layout_constraintStart_toEndOf="@+id/menu_btn_settings"
+                app:layout_constraintTop_toBottomOf="@+id/menu_btn_settings" />
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/menu_img_close"

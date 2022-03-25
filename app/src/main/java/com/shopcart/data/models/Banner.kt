@@ -1,5 +1,6 @@
 package com.shopcart.data.models
 
 data class Banner(
-    val photoUrl: String? = null
+    val id: String = "",
+    val photoUrl: String = ""
 )

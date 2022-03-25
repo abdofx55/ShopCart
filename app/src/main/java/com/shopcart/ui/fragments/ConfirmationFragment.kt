@@ -12,6 +12,8 @@ import com.shopcart.databinding.FragmentConfirmationBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Confirmation Fragment"
+
 @AndroidEntryPoint
 class ConfirmationFragment : Fragment() {
     private lateinit var binding: FragmentConfirmationBinding

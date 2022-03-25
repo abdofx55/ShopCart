@@ -12,6 +12,8 @@ import com.shopcart.databinding.FragmentWelcomeBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Payment Fragment"
+
 @AndroidEntryPoint
 class PaymentFragment : Fragment() {
     private lateinit var binding: FragmentWelcomeBinding

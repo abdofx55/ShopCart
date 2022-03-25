@@ -41,6 +41,9 @@
             app:destination="@id/settingsFragment"
             app:launchSingleTop="true"
             app:popUpTo="@+id/menuFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_entry_fragments"
+            app:destination="@id/entry_fragments" />
     </fragment>
 
     <fragment
@@ -154,9 +157,9 @@
         </fragment>
         <fragment
             android:id="@+id/loginFragment"
-            android:name="com.shopcart.ui.fragments.LoginFragment"
+            android:name="com.shopcart.ui.fragments.SignInFragment"
             android:label="fragment_login"
-            tools:layout="@layout/fragment_login">
+            tools:layout="@layout/fragment_sign_in">
             <action
                 android:id="@+id/action_loginFragment_to_homeFragment"
                 app:destination="@id/homeFragment"

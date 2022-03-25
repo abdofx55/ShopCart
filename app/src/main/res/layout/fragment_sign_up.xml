@@ -85,9 +85,9 @@
             android:layout_marginRight="72dp"
             android:visibility="invisible"
             app:SpinKit_Color="@android:color/white"
-            app:layout_constraintBottom_toTopOf="@+id/sign_btn_sign"
+            app:layout_constraintBottom_toBottomOf="@+id/sign_btn_sign"
             app:layout_constraintEnd_toEndOf="@+id/sign_btn_sign"
-            app:layout_constraintTop_toBottomOf="@+id/sign_btn_sign"
+            app:layout_constraintTop_toTopOf="@+id/sign_btn_sign"
             app:layout_constraintVertical_bias="0.47" />
 
         <Button

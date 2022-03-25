@@ -1,58 +1,54 @@
 package com.shopcart.ui.adapters
 
-import android.content.res.Resources
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager.widget.PagerAdapter
-import com.shopcart.R
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.shopcart.data.models.OnBoardingItem
 import com.shopcart.databinding.ItemOnBoardingBinding
 
-class OnBoardingPagerAdapter : PagerAdapter() {
+class OnBoardingPagerAdapter :
+    ListAdapter<OnBoardingItem, OnBoardingPagerAdapter.ViewHolder>(MyDiffUtil) {
 
-    // ِArrays
-    private val icons = intArrayOf(
-        R.drawable.onboarding_shipping,
-        R.drawable.onboarding_returns,
-        R.drawable.onboarding_support,
-        R.drawable.onboarding_payments
-    )
+    // DiffUtil is a utility class that calculates the difference between two lists
+    // and outputs a list of update operations that converts the first list into the second one.
+    companion object MyDiffUtil : DiffUtil.ItemCallback<OnBoardingItem>() {
 
-    private val titles = intArrayOf(
-        R.string.onboarding_title_1,
-        R.string.onboarding_title_2,
-        R.string.onboarding_title_3,
-        R.string.onboarding_title_4
-    )
 
-    private val texts = intArrayOf(
-        R.string.onboarding_text_1,
-        R.string.onboarding_text_2,
-        R.string.onboarding_text_3,
-        R.string.onboarding_text_4
-    )
+        // Checks if the two objects are the same
+        override fun areItemsTheSame(oldItem: OnBoardingItem, newItem: OnBoardingItem): Boolean {
+            return oldItem == newItem
+        }
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view === `object`
+        // Checks if the data between the two objects is the same
+        override fun areContentsTheSame(oldItem: OnBoardingItem, newItem: OnBoardingItem): Boolean {
+            return oldItem.icon == newItem.icon
+        }
+
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    // Holds the views for adding it to image and text
+    inner class ViewHolder(val binding: ItemOnBoardingBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(position: Int) {
+            binding.onboardingImgIcon.setImageResource(currentList[position].icon)
+            binding.onboardingTxtTitle.text =
+                binding.root.resources.getString(currentList[position].title)
+            binding.onboardingTxtText.text =
+                binding.root.resources.getString(currentList[position].text)
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ItemOnBoardingBinding.inflate(LayoutInflater.from(container.context), container, false)
+            ItemOnBoardingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        binding.onboardingImgIcon.setImageResource(icons[position])
-        binding.onboardingTxtTitle.text = Resources.getSystem().getString(titles[position])
-        binding.onboardingTxtText.text = Resources.getSystem().getString(texts[position])
-
-        container.addView(binding.root, position)
-        return binding.root
+        return ViewHolder(binding)
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
-    }
-
-    override fun getCount(): Int {
-        return icons.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(position)
     }
 }

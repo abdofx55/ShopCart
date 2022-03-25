@@ -8,15 +8,17 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.auth.FirebaseUser
 import com.shopcart.R
-import com.shopcart.data.models.User
 import com.shopcart.databinding.FragmentSignUpBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
+import com.shopcart.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
+
+private const val TAG = "Sign Up Fragment"
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment(), View.OnClickListener {
@@ -43,6 +45,34 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             signBtnLogin.setOnClickListener(this@SignUpFragment)
         }
 
+        viewModel.authStatus.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    updateUIWhenSigning(UPDATE_UI_WHEN_SIGNING_IN)
+                }
+                is Resource.Success -> {
+                    Toasty.success(
+                        requireContext(),
+                        getString(R.string.sign_toast_sign_success),
+                        Toast.LENGTH_LONG,
+                        true
+                    ).show()
+
+                    openSignInFragment()
+
+                }
+                is Resource.Error -> {
+                    updateUIWhenSigning(RESET_UI_WHEN_SIGNING_FAILED)
+                    Toasty.error(
+                        requireContext(),
+                        "${it.message}",
+                        Toast.LENGTH_SHORT,
+                        true
+                    ).show()
+                }
+            }
+        })
+
         return binding.root
     }
 
@@ -50,10 +80,15 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         when (v) {
             // Back Button
             binding.signImgBack -> requireActivity().onBackPressed()
+
+            // Sign Up Button
             binding.signBtnSign -> {
-                if (isConnected((activity)!!)) {
-                    updateUIWhenSigning(UPDATE_UI_WHEN_SIGNING_IN)
-                    signUp()
+                // check is network connected
+                if (isConnected(requireContext())) {
+                    viewModel.signUp(
+                        binding.signLayoutBody.signEditEmail.text.toString().trim(),
+                        binding.signLayoutBody.signEditPassword.text.toString().trim()
+                    )
                 } else Toasty.warning(
                     requireContext(),
                     getString(R.string.no_internet),
@@ -61,120 +96,49 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                     true
                 ).show()
             }
+
+            // Go to Sign In Button
             binding.signBtnLogin -> {
-                val action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
-                val navController = NavHostFragment.findNavController(this)
-                val navDestination = navController.currentDestination
-                if (navDestination != null && navDestination.id == R.id.signUpFragment) navController.navigate(
-                    action
-                )
+                openSignInFragment()
             }
         }
     }
 
-    private fun signUp() {
-        viewModel.firebaseAuth.createUserWithEmailAndPassword(
-            binding.signLayoutBody.signEditEmail.text.toString().trim { it <= ' ' },
-            binding.signLayoutBody.signEditPassword.text.toString().trim { it <= ' ' })
-            .addOnSuccessListener {
-                if (isAdded && it.user != null) {
-                    sendVerification(it.user)
-                }
-            }.addOnFailureListener { e ->
-                // First Check if the fragment still added
-                if (isAdded) {
-                    // If sign in fails, display a message to the user.
-                    updateUIWhenSigning(RESET_UI_WHEN_SIGNING_FAILED)
-                    Toasty.error(
-                        requireContext(),
-                        "${e.localizedMessage} ",
-                        Toast.LENGTH_LONG,
-                        true
-                    ).show()
-                }
-            }
-    }
-
-    private fun sendVerification(user: FirebaseUser?) {
-        user?.sendEmailVerification()?.addOnSuccessListener { addUserToDatabase(user) }
-            ?.addOnFailureListener { e ->
-                user.delete()
-                Toasty.error(
-                    requireContext(),
-                    "Failed to create a new account" + "\n" + e.localizedMessage,
-                    Toast.LENGTH_LONG,
-                    true
-                ).show()
-            }
-    }
-
-    private fun addUserToDatabase(user: FirebaseUser?) {
-        if (user != null) {
-            // Create a new user with a name
-            val newUser = User()
-            newUser.id = user.uid
-            newUser.email =
-                binding.signLayoutBody.signEditEmail.text.toString().trim { it <= ' ' }
-            newUser.name = binding.signLayoutBody.signEditName.text.toString().trim { it <= ' ' }
-
-            // Add a new document with a user ID
-            viewModel.fireStore.collection("users").document(user.uid).set(newUser)
-                .addOnSuccessListener {
-                    if (isAdded) {
-                        Toasty.success(
-                            (activity)!!,
-                            getString(R.string.sign_toast_sign_success),
-                            Toast.LENGTH_LONG,
-                            true
-                        ).show()
-                        val action =
-                            SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
-                        val navController =
-                            NavHostFragment.findNavController(this@SignUpFragment)
-                        val navDestination = navController.currentDestination
-                        if (navDestination != null && navDestination.id == R.id.signUpFragment) navController.navigate(
-                            action
-                        )
-                    }
-                }.addOnFailureListener { e ->
-                    user.delete()
-                    Toasty.error(
-                        requireContext(),
-                        "Failed to create a new account" + "\n" + e.localizedMessage,
-                        Toast.LENGTH_LONG,
-                        true
-                    ).show()
-                }
-        }
+    private fun openSignInFragment() {
+        val action =
+            SignUpFragmentDirections.actionSignUpFragmentToLoginFragment()
+        val navController =
+            NavHostFragment.findNavController(this@SignUpFragment)
+        val navDestination = navController.currentDestination
+        if (navDestination != null && navDestination.id == R.id.signUpFragment) navController.navigate(
+            action
+        )
     }
 
     private fun updateUIWhenSigning(flag: Int) {
-        // First Check if the fragment still added
-        if (isAdded) {
-            //Second Check Flag whether update or reset UI
-            if (flag == UPDATE_UI_WHEN_SIGNING_IN) {
-                // Update UI during sign up
-                binding.apply {
-                    signLayoutBody.signEditName.isEnabled = false
-                    signLayoutBody.signEditEmail.isEnabled = false
-                    signLayoutBody.signEditPassword.isEnabled = false
-                    signBtnSign.isEnabled = false
-                    signBtnSign.text = activity!!.getString(R.string.sign_signing)
-                    signSpinKit.visibility = View.VISIBLE
-                }
-
-            } else if (flag == RESET_UI_WHEN_SIGNING_FAILED) {
-                // Reset UI if sign up failed
-                binding.apply {
-                    signLayoutBody.signEditName.isEnabled = true
-                    signLayoutBody.signEditEmail.isEnabled = true
-                    signLayoutBody.signEditPassword.isEnabled = true
-                    signBtnSign.isEnabled = true
-                    signBtnSign.text = activity!!.getString(R.string.sign_sign)
-                    signSpinKit.visibility = View.INVISIBLE
-                }
-
+        //Check Flag whether update or reset UI
+        if (flag == UPDATE_UI_WHEN_SIGNING_IN) {
+            // Update UI during sign up
+            binding.apply {
+                signLayoutBody.signEditName.isEnabled = false
+                signLayoutBody.signEditEmail.isEnabled = false
+                signLayoutBody.signEditPassword.isEnabled = false
+                signBtnSign.isEnabled = false
+                signBtnSign.text = activity!!.getString(R.string.sign_signing)
+                signSpinKit.visibility = View.VISIBLE
             }
+
+        } else if (flag == RESET_UI_WHEN_SIGNING_FAILED) {
+            // Reset UI if sign up failed
+            binding.apply {
+                signLayoutBody.signEditName.isEnabled = true
+                signLayoutBody.signEditEmail.isEnabled = true
+                signLayoutBody.signEditPassword.isEnabled = true
+                signBtnSign.isEnabled = true
+                signBtnSign.text = activity!!.getString(R.string.sign_sign)
+                signSpinKit.visibility = View.INVISIBLE
+            }
+
         }
     }
 }

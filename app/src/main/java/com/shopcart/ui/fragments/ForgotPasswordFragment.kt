@@ -16,6 +16,8 @@ import com.shopcart.utilities.NetworkUtils.Companion.isConnected
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 
+private const val TAG = "Forgot Passoword Fragment"
+
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentForgotPasswordBinding

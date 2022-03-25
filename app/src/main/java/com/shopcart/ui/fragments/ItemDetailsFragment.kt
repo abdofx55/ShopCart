@@ -10,6 +10,8 @@ import com.shopcart.R
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Item Details Fragment"
+
 @AndroidEntryPoint
 class ItemDetailsFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()

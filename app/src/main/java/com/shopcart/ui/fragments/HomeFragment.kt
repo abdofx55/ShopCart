@@ -1,29 +1,35 @@
 package com.shopcart.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.shopcart.R
 import com.shopcart.databinding.FragmentHomeBinding
 import com.shopcart.ui.adapters.CategoriesAdapter
 import com.shopcart.ui.adapters.HorizontalAdapter
 import com.shopcart.ui.adapters.SliderAdapter
 import com.shopcart.ui.viewModels.MainViewModel
-import com.shopcart.utilities.Constants
+import com.shopcart.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), View.OnClickListener {
+    private val TAG = HomeFragment::class.java.name
+
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -53,43 +59,20 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
             homePager.adapter = sliderAdapter
-            homeTabDots.setupWithViewPager(homePager, true)
             homeRecyclerCategories.adapter = categoriesAdapter
             homeRecyclerFeatured.adapter = featuredAdapter
             homeRecyclerBest.adapter = bestAdapter
 
-            homePager.addOnPageChangeListener(object : OnPageChangeListener {
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) {
-                }
+            TabLayoutMediator(homeTabDots, homePager) { tab, position -> }.attach()
+
+            homePager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
                 override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // save position
                     viewModel.sliderCurrentPage = position
                 }
-
-                override fun onPageScrollStateChanged(state: Int) {}
             })
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                // check for last item
-                if (viewModel.sliderCurrentPage == sliderAdapter.count - 1)
-                    viewModel.sliderCurrentPage = 0
-                else viewModel.sliderCurrentPage++
-
-                homePager.currentItem = viewModel.sliderCurrentPage
-
-            }, Constants.HOME_SLIDER_DELAY)
-
-
-//            button2.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Tasks.deleteAccount(requireActivity() , firebaseAuth , firestore);
-//                }
-//            });
 
             homeImgMenu.setOnClickListener(this@HomeFragment)
             homeImgCart.setOnClickListener(this@HomeFragment)
@@ -97,9 +80,32 @@ class HomeFragment : Fragment(), View.OnClickListener {
             homeTxtBestMore.setOnClickListener(this@HomeFragment)
         }
 
-        getData()
-
         return binding.root
+    }
+
+    private fun setupSlider() {
+        CoroutineScope(Dispatchers.Default).launch {
+//            while (true) {
+//                if (sliderAdapter.itemCount > 0) {
+//                    // check for last item
+//                    if (viewModel.sliderCurrentPage == sliderAdapter.itemCount - 1)
+//                        viewModel.sliderCurrentPage = 0
+//
+//                    viewModel.sliderCurrentPage++
+//                    binding.homePager.currentItem = viewModel.sliderCurrentPage
+//
+//                    Log.d(TAG, "slider in process")
+
+//                //repeat Task Here
+//                delay(2000)
+//            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getData()
+        setupSlider()
     }
 
     private fun setupAdapters() {
@@ -116,10 +122,77 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getData() {
-        sliderAdapter.setList(viewModel.banners.value)
-        categoriesAdapter.submitList(viewModel.categories.value)
-//        featuredAdapter.submitList(viewModel.featuredProducts.value)
-//        bestAdapter.submitList(viewModel.bestSellProducts.value)
+        // Banners
+        viewModel.banners.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    sliderAdapter.submitList(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+        })
+
+        // Categories
+        viewModel.categories.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    categoriesAdapter.submitList(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+        })
+
+        // Featured Products
+        viewModel.featuredProducts.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    Log.d(TAG, "Loading")
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    featuredAdapter.submitList(it.data)
+                    for (product in it.data!!) {
+                        Log.d(TAG, product.name)
+                    }
+                }
+
+                is Resource.Error -> {
+                    Log.d(TAG, it.message!!)
+                }
+            }
+        })
+
+        // Best Sell Products
+        viewModel.bestSellProducts.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    bestAdapter.submitList(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+        })
     }
 
     override fun onClick(v: View) {
@@ -164,9 +237,12 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     private fun checkOnBoardingState() {
+        Log.d(TAG, "check onboarding ${viewModel.onBoardingState}")
         // Check if we need to display our OnBoarding Fragment
         if (!viewModel.onBoardingState) {
             // The user hasn't seen the OnBoardingFragment yet, so show it
+            Log.d(TAG, "The user hasn't seen the OnBoardingFragment yet, so show it")
+
             openOnBoardingFragment()
         }
     }
@@ -176,6 +252,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         if (viewModel.firebaseAuth.currentUser == null ||
             viewModel.firebaseAuth.currentUser?.isEmailVerified == false
         ) {
+
             // The user hasn't signed in , so WelcomeFragment
             openWelcomeFragment()
 
@@ -187,18 +264,22 @@ class HomeFragment : Fragment(), View.OnClickListener {
             HomeFragmentDirections.actionHomeFragmentToEntryFragments()
         val navController = NavHostFragment.findNavController(this)
         val navDestination = navController.currentDestination
-        if (navDestination != null && navDestination.id == R.id.home) navController.navigate(
+        if (navDestination != null && navDestination.id == R.id.homeFragment) navController.navigate(
             action
         )
     }
 
     private fun openOnBoardingFragment() {
+        Log.d(TAG, "opening onBoarding Fragment")
         val action =
             HomeFragmentDirections.actionHomeFragmentToOnBoardingFragment()
         val navController = NavHostFragment.findNavController(this)
         val navDestination = navController.currentDestination
-        if (navDestination != null && navDestination.id == R.id.home) navController.navigate(
-            action
-        )
+        if (navDestination != null && navDestination.id == R.id.homeFragment) {
+            Log.d(TAG, "open onBoarding")
+            navController.navigate(
+                action
+            )
+        }
     }
 }

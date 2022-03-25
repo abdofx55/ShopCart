@@ -65,25 +65,28 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    implementation 'androidx.fragment:fragment-ktx:1.4.1'
-
     // SplashScreen compat library
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 
+    // viewpager2
+    implementation 'com.google.android.material:material:1.6.0-alpha03'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
 
-    // Firebase Library
-    implementation 'com.google.firebase:firebase-analytics:20.1.0'
-    implementation 'com.google.firebase:firebase-auth:21.0.2'
-    implementation 'com.google.firebase:firebase-firestore:24.0.2'
-    implementation 'com.google.firebase:firebase-storage:20.0.1'
-    implementation 'com.firebaseui:firebase-ui-storage:8.0.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:20.1.2'
+    // Firebase Libraries
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.2.1')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
 
     // Kotlin
     implementation 'androidx.core:core-ktx:1.7.0'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2'
 
     // Loading bar library
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
@@ -101,7 +104,11 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'com.google.android.material:material:1.5.0'
 
+    // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+
+    // Livedata
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.0-alpha03"

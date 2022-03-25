@@ -8,8 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.google.android.material.tabs.TabLayoutMediator
 import com.shopcart.R
+import com.shopcart.data.models.OnBoardingItem
 import com.shopcart.databinding.FragmentOnBoardingBinding
 import com.shopcart.ui.adapters.OnBoardingPagerAdapter
 import com.shopcart.ui.viewModels.MainViewModel
@@ -19,8 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnBoardingFragment : Fragment(), View.OnClickListener {
+    private val TAG = OnBoardingFragment::class.java.name
+
     private lateinit var binding: FragmentOnBoardingBinding
-    private lateinit var onBoardingPagerAdapter: OnBoardingPagerAdapter
+    private lateinit var adapter: OnBoardingPagerAdapter
     private val viewModel: MainViewModel by viewModels()
 
 
@@ -34,23 +38,27 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
         hideSystemBars(requireActivity())
         defaultNavigationBar(requireActivity())
 
-        onBoardingPagerAdapter = OnBoardingPagerAdapter()
+
+        adapter = OnBoardingPagerAdapter()
+
+        submitList()
+
 
         binding.apply {
-            onboardingTabDots.setupWithViewPager(binding.onboardingPager, true)
-            onboardingPager.adapter = onBoardingPagerAdapter
+            onboardingPager.adapter = adapter
             onboardingPager.currentItem = viewModel.onBoardingCurrentPage
 
-            onboardingPager.addOnPageChangeListener(object : OnPageChangeListener {
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) {
-                }
+            TabLayoutMediator(onboardingTabDots, onboardingPager) { tab, position -> }.attach()
+
+            onboardingPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
 
                 override fun onPageSelected(position: Int) {
-                    if (position == onBoardingPagerAdapter.count - 1) {
+                    super.onPageSelected(position)
+                    // save position
+                    viewModel.onBoardingCurrentPage = position
+
+                    // update UI
+                    if (position == adapter.itemCount - 1) {
                         binding.onboardingBtnSkip.visibility = View.INVISIBLE
                         binding.onboardingImgNext.visibility = View.GONE
                         binding.onboardingBtnFinish.visibility = View.VISIBLE
@@ -61,7 +69,6 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
                     }
                 }
 
-                override fun onPageScrollStateChanged(state: Int) {}
             })
 
             onboardingBtnSkip.setOnClickListener(this@OnBoardingFragment)
@@ -72,6 +79,7 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
+
     override fun onClick(v: View) {
         when (v) {
             binding.onboardingBtnSkip, binding.onboardingBtnFinish -> {
@@ -80,10 +88,44 @@ class OnBoardingFragment : Fragment(), View.OnClickListener {
                 viewModel.onBoardingState = true
             }
 
-            binding.onboardingImgNext -> if (viewModel.onBoardingCurrentPage < onBoardingPagerAdapter.count) {
-                binding.onboardingPager.currentItem = ++viewModel.onBoardingCurrentPage
+            binding.onboardingImgNext -> {
+                if (viewModel.onBoardingCurrentPage < adapter.itemCount) {
+                    binding.onboardingPager.currentItem = viewModel.onBoardingCurrentPage + 1
+                }
             }
         }
+    }
+
+    private fun submitList() {
+        val list: ArrayList<OnBoardingItem> = ArrayList()
+
+        list.add(
+            OnBoardingItem(
+                R.drawable.onboarding_shipping,
+                R.string.onboarding_title_1,
+                R.string.onboarding_text_1
+            )
+        )
+        list.add(
+            OnBoardingItem(
+                R.drawable.onboarding_returns, R.string.onboarding_title_1,
+                R.string.onboarding_text_1
+            )
+        )
+        list.add(
+            OnBoardingItem(
+                R.drawable.onboarding_support, R.string.onboarding_title_2,
+                R.string.onboarding_text_2
+            )
+        )
+        list.add(
+            OnBoardingItem(
+                R.drawable.onboarding_payments, R.string.onboarding_title_3,
+                R.string.onboarding_text_3
+            )
+        )
+
+        adapter.submitList(list)
     }
 
     private fun openWelcomeFragment() {

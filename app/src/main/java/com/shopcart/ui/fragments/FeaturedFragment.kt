@@ -7,21 +7,22 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shopcart.R
 import com.shopcart.databinding.FragmentFeaturedBinding
 import com.shopcart.ui.adapters.ProductsAdapter
 import com.shopcart.ui.viewModels.MainViewModel
+import com.shopcart.utilities.Resource
 import com.shopcart.utilities.VisualUtils.SpacingItemDecoration
 import com.shopcart.utilities.VisualUtils.calculateNoOfColumns
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass.
- */
 
 @AndroidEntryPoint
 class FeaturedFragment : Fragment() {
+    private val TAG = FeaturedFragment::class.java.name
+
     private lateinit var binding: FragmentFeaturedBinding
     private lateinit var adapter: ProductsAdapter
     private val viewModel: MainViewModel by viewModels()
@@ -36,8 +37,6 @@ class FeaturedFragment : Fragment() {
         adapter = ProductsAdapter(ProductsAdapter.OnClickListener { position, item ->
             // TODO item click listener
         })
-
-        adapter.submitList(viewModel.featuredProducts.value)
 
         binding.apply {
             featuredRecycler.layoutManager = GridLayoutManager(
@@ -54,10 +53,32 @@ class FeaturedFragment : Fragment() {
             )
 
             featuredRecycler.adapter = adapter
-
             featuredImgBack.setOnClickListener { requireActivity().onBackPressed() }
         }
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getFeaturedList()
+    }
+
+    private fun getFeaturedList() {
+        viewModel.featuredProducts.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    adapter.submitList(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+        })
     }
 }

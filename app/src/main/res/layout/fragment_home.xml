@@ -31,9 +31,9 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/home_img_menu"
+            app:layout_constraintBottom_toBottomOf="@+id/home_img_menu"
             app:layout_constraintEnd_toStartOf="@+id/home_guideline_end"
-            app:layout_constraintTop_toBottomOf="@+id/home_img_menu"
+            app:layout_constraintTop_toTopOf="@+id/home_img_menu"
             app:srcCompat="@drawable/ic_shopping_cart" />
 
 
@@ -77,10 +77,11 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline_start"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.viewpager.widget.ViewPager
+                    <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/home_pager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layoutDirection="ltr"
                         android:background="@android:color/transparent" />
 
                     <com.google.android.material.tabs.TabLayout
@@ -109,14 +110,11 @@
                 <TextView
                     android:id="@+id/home_txt_categories_more"
                     style="@style/home_see_all"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
                     android:padding="8dp"
                     android:text="@string/home_more"
-                    app:layout_constraintBottom_toTopOf="@+id/home_txt_categories"
+                    app:layout_constraintBottom_toBottomOf="@+id/home_txt_categories"
                     app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-                    app:layout_constraintTop_toBottomOf="@+id/home_txt_categories"
-                    app:layout_constraintVertical_bias="0.392" />
+                    app:layout_constraintTop_toTopOf="@+id/home_txt_categories" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/home_recycler_categories"
@@ -144,10 +142,9 @@
                     style="@style/home_see_all"
                     android:padding="8dp"
                     android:text="@string/home_more"
-                    app:layout_constraintBottom_toTopOf="@+id/home_txt_featured"
-                    app:layout_constraintEnd_toEndOf="@+id/home_txt_categories_more"
-                    app:layout_constraintTop_toBottomOf="@+id/home_txt_featured" />
-
+                    app:layout_constraintBottom_toBottomOf="@+id/home_txt_featured"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+                    app:layout_constraintTop_toTopOf="@+id/home_txt_featured" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/home_recycler_featured"
@@ -157,8 +154,9 @@
                     android:clipToPadding="false"
                     android:paddingLeft="@dimen/guideline_margin_2"
                     android:paddingRight="@dimen/guideline_margin_2"
-                    app:layout_constraintTop_toBottomOf="@+id/home_txt_featured"
-                    tools:layout_editor_absoluteX="0dp" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_txt_featured" />
 
                 <TextView
                     android:id="@+id/home_txt_best"
@@ -173,9 +171,9 @@
                     style="@style/home_see_all"
                     android:padding="8dp"
                     android:text="@string/home_more"
-                    app:layout_constraintBottom_toTopOf="@+id/home_txt_best"
-                    app:layout_constraintEnd_toEndOf="@+id/home_txt_featured_more"
-                    app:layout_constraintTop_toBottomOf="@+id/home_txt_best" />
+                    app:layout_constraintBottom_toBottomOf="@+id/home_txt_best"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+                    app:layout_constraintTop_toTopOf="@+id/home_txt_best" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -227,15 +225,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
-
-
-    <!--    <androidx.appcompat.widget.AppCompatImageView-->
-    <!--        android:id="@+id/item_img_filter"-->
-    <!--        android:layout_width="48dp"-->
-    <!--        android:layout_height="48dp"-->
-    <!--        android:background="?attr/selectableItemBackgroundBorderless"-->
-    <!--        android:padding="14dp"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/itefm_img_cart"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/item_guideline_end"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/item_img_cart"-->
-    <!--        app:srcCompat="@drawable/ic_filter" />-->

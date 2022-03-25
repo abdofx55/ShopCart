@@ -10,6 +10,8 @@ import com.shopcart.R
 import com.shopcart.ui.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "Language Fragment"
+
 @AndroidEntryPoint
 class LanguageFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()

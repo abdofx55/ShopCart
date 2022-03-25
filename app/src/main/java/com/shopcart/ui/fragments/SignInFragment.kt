@@ -1,8 +1,6 @@
 package com.shopcart.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +8,21 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.shopcart.R
-import com.shopcart.databinding.FragmentLoginBinding
+import com.shopcart.databinding.FragmentSignInBinding
 import com.shopcart.ui.viewModels.MainViewModel
 import com.shopcart.utilities.NetworkUtils.Companion.isConnected
+import com.shopcart.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import es.dmoral.toasty.Toasty
 
+private const val TAG = "Sign In Fragment"
+
 @AndroidEntryPoint
-class LoginFragment : Fragment(), View.OnClickListener {
-    private lateinit var binding: FragmentLoginBinding
+class SignInFragment : Fragment(), View.OnClickListener {
+    private lateinit var binding: FragmentSignInBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -28,14 +30,45 @@ class LoginFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)
 
         binding.apply {
-            loginImgBack.setOnClickListener(this@LoginFragment)
-            loginBtnLogin.setOnClickListener(this@LoginFragment)
-            loginBtnSign.setOnClickListener(this@LoginFragment)
-            loginBtnForgot.setOnClickListener(this@LoginFragment)
+            loginImgBack.setOnClickListener(this@SignInFragment)
+            loginBtnLogin.setOnClickListener(this@SignInFragment)
+            loginBtnSign.setOnClickListener(this@SignInFragment)
+            loginBtnForgot.setOnClickListener(this@SignInFragment)
         }
+
+        viewModel.signInStatus.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    updateUIWhenLogging(UPDATE_UI_WHEN_LOGGING)
+                }
+
+                is Resource.Success -> {
+                    // Sign in success, Download Data then update UI with the signed-in user's information1
+                    viewModel.getData()
+                    Toasty.success(
+                        requireContext(),
+                        getString(R.string.login_toast_login_success),
+                        Toast.LENGTH_SHORT,
+                        true
+                    ).show()
+
+                    openHomeFragment()
+                }
+
+                is Resource.Error -> {
+                    updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED)
+                    Toasty.info(
+                        requireContext(),
+                        "${it.message}",
+                        Toast.LENGTH_LONG,
+                        true
+                    ).show()
+                }
+            }
+        })
 
         return binding.root
     }
@@ -47,23 +80,23 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             // Login Button
             binding.loginBtnLogin -> {
-                // first check is network connected
-                if (isConnected(activity!!)) {
-                    updateUIWhenLogging(UPDATE_UI_WHEN_LOGGING)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // Log in
-                        login()
-                    }, 300)
+                // check is network connected
+                if (isConnected(requireContext())) {
+                    viewModel.signIn(
+                        binding.loginLayoutBody.loginEditEmail.text.toString().trim(),
+                        binding.loginLayoutBody.loginEditPassword.text.toString().trim()
+                    )
+
                 } else Toasty.warning(
-                    activity!!,
+                    requireContext(),
                     getString(R.string.no_internet),
                     Toast.LENGTH_SHORT,
                     true
                 ).show()
             }
-            // Sign Up Button
+            // Go to Sign Up Button
             binding.loginBtnSign -> {
-                val action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment()
+                val action = SignInFragmentDirections.actionLoginFragmentToSignUpFragment()
                 val navController = NavHostFragment.findNavController(this)
                 val navDestination = navController.currentDestination
                 if (navDestination != null && navDestination.id == R.id.loginFragment) navController.navigate(
@@ -72,7 +105,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
             // Forgot Password Button
             binding.loginBtnForgot -> {
-                val action = LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
+                val action = SignInFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
                 val navController = NavHostFragment.findNavController(this)
                 val navDestination = navController.currentDestination
                 if (navDestination != null && navDestination.id == R.id.loginFragment) navController.navigate(
@@ -82,56 +115,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun login() {
-        viewModel.firebaseAuth.signInWithEmailAndPassword(
-            binding.loginLayoutBody.loginEditEmail.text.toString().trim(),
-            binding.loginLayoutBody.loginEditPassword.text.toString().trim()
-        )
-            .addOnSuccessListener { authResult ->
-                if (isAdded) {
-                    authResult.user?.let {
-                        if (it.isEmailVerified) {
-                            // Sign in success, Download Data then update UI with the signed-in user's information1
-                            viewModel.getData()
-                            Toasty.success(
-                                requireContext(),
-                                getString(R.string.login_toast_login_success),
-                                Toast.LENGTH_SHORT,
-                                true
-                            ).show()
-                            openHomeFragment()
-
-                        } else {
-                            updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED)
-                            Toasty.info(
-                                activity!!,
-                                getString(R.string.login_toast_please_verify),
-                                Toast.LENGTH_LONG,
-                                true
-                            ).show()
-                        }
-                    }
-                }
-            }.addOnFailureListener { e ->
-                // First Check if the fragment still added
-                if (isAdded) {
-                    // If sign in fails, display a message to the user.
-                    updateUIWhenLogging(RESET_UI_WHEN_LOGGING_FAILED)
-                    Toasty.error(
-                        requireContext(),
-                        "${e.localizedMessage} ",
-                        Toast.LENGTH_LONG,
-                        true
-                    ).show()
-                }
-            }
-    }
-
     private fun openHomeFragment() {
         val action =
-            LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+            SignInFragmentDirections.actionLoginFragmentToHomeFragment()
         val navController =
-            NavHostFragment.findNavController(this@LoginFragment)
+            NavHostFragment.findNavController(this@SignInFragment)
         val navDestination = navController.currentDestination
         if (navDestination != null && navDestination.id == R.id.loginFragment) navController.navigate(
             action

@@ -41,7 +41,6 @@
             android:fontFamily="@font/segoeui"
             android:hint="@string/home_search"
             android:maxLines="1"
-
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:textColor="@color/third_color"

@@ -13,12 +13,6 @@
         android:background="@android:color/white"
         tools:context=".ui.fragments.OnBoardingFragment">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/onboarding_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="?attr/actionBarSize" />
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -71,6 +65,13 @@
                 app:srcCompat="@drawable/ic_next" />
 
         </FrameLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/onboarding_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutDirection="ltr"
+            android:paddingBottom="?attr/actionBarSize" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

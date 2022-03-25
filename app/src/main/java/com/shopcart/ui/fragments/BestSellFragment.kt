@@ -7,17 +7,22 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shopcart.R
 import com.shopcart.databinding.FragmentBestSellBinding
 import com.shopcart.ui.adapters.ProductsAdapter
 import com.shopcart.ui.viewModels.MainViewModel
+import com.shopcart.utilities.Resource
 import com.shopcart.utilities.VisualUtils.SpacingItemDecoration
 import com.shopcart.utilities.VisualUtils.calculateNoOfColumns
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class BestSellFragment : Fragment() {
+    private val TAG = BestSellFragment::class.java.name
+
     private lateinit var binding: FragmentBestSellBinding
     private lateinit var adapter: ProductsAdapter
     private val viewModel: MainViewModel by viewModels()
@@ -31,7 +36,6 @@ class BestSellFragment : Fragment() {
         adapter = ProductsAdapter(ProductsAdapter.OnClickListener { position, item ->
             // TODO item click listener
         })
-        adapter.submitList(viewModel.bestSellProducts.value)
 
         binding.apply {
             bestRecycler.layoutManager = GridLayoutManager(
@@ -55,5 +59,28 @@ class BestSellFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getBestSellList()
+    }
+
+    private fun getBestSellList() {
+        viewModel.bestSellProducts.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    // TODO Do shimmer effect
+                }
+
+                is Resource.Success -> {
+                    adapter.submitList(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+        })
     }
 }
