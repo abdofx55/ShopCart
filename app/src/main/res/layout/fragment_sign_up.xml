@@ -83,6 +83,7 @@
             android:layout_gravity="center"
             android:layout_marginEnd="72dp"
             android:layout_marginRight="72dp"
+            android:paddingTop="4dp"
             android:visibility="invisible"
             app:SpinKit_Color="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/sign_btn_sign"
@@ -99,9 +100,9 @@
             android:text="@string/sign_login"
             android:textAllCaps="false"
             android:textSize="@dimen/edit_text_label_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/sign_txt_dont"
+            app:layout_constraintBottom_toBottomOf="@+id/sign_txt_dont"
             app:layout_constraintStart_toEndOf="@+id/sign_txt_dont"
-            app:layout_constraintTop_toBottomOf="@+id/sign_txt_dont" />
+            app:layout_constraintTop_toTopOf="@+id/sign_txt_dont" />
 
 
         <androidx.constraintlayout.widget.Guideline

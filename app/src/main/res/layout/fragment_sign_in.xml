@@ -78,6 +78,7 @@
             android:layout_gravity="center"
             android:layout_marginEnd="72dp"
             android:layout_marginRight="72dp"
+            android:paddingTop="4dp"
             android:visibility="invisible"
             app:SpinKit_Color="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/login_btn_login"
@@ -95,9 +96,9 @@
             android:textAllCaps="false"
             android:textColor="@color/secondaryText"
             android:textSize="@dimen/edit_text_label_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/login_txt_dont"
+            app:layout_constraintBottom_toBottomOf="@+id/login_txt_dont"
             app:layout_constraintStart_toEndOf="@+id/login_txt_dont"
-            app:layout_constraintTop_toBottomOf="@+id/login_txt_dont" />
+            app:layout_constraintTop_toTopOf="@+id/login_txt_dont" />
 
         <Button
             android:id="@+id/login_btn_forgot"
