@@ -69,7 +69,6 @@
             app:layout_constraintStart_toStartOf="@+id/login_btn_login"
             app:layout_constraintTop_toBottomOf="@+id/login_btn_login" />
 
-
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/login_spin_kit"
             style="@style/SpinKitView.ThreeBounce"
@@ -114,7 +113,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/login_guideline_end"
             app:layout_constraintStart_toStartOf="@+id/login_guideline_start" />
-
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/login_guideline_start"

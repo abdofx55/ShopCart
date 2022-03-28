@@ -1,10 +1,13 @@
 package com.shopcart.ui.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnAttach
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,11 +23,9 @@ import com.shopcart.ui.adapters.CategoriesAdapter
 import com.shopcart.ui.adapters.HorizontalAdapter
 import com.shopcart.ui.adapters.SliderAdapter
 import com.shopcart.ui.viewModels.MainViewModel
+import com.shopcart.utilities.Constants
 import com.shopcart.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), View.OnClickListener {
@@ -80,43 +81,44 @@ class HomeFragment : Fragment(), View.OnClickListener {
             homeTxtBestMore.setOnClickListener(this@HomeFragment)
         }
 
+        getData()
+
         return binding.root
     }
 
     private fun setupSlider() {
-        CoroutineScope(Dispatchers.Default).launch {
-//            while (true) {
-//                if (sliderAdapter.itemCount > 0) {
-//                    // check for last item
-//                    if (viewModel.sliderCurrentPage == sliderAdapter.itemCount - 1)
-//                        viewModel.sliderCurrentPage = 0
-//
-//                    viewModel.sliderCurrentPage++
-//                    binding.homePager.currentItem = viewModel.sliderCurrentPage
-//
-//                    Log.d(TAG, "slider in process")
+        val handler = Handler(Looper.getMainLooper())
 
-//                //repeat Task Here
-//                delay(2000)
-//            }
-        }
-    }
+        handler.post(object : Runnable {
+            override fun run() {
+                binding.homePager.doOnAttach {
+                    Log.d(
+                        "*************",
+                        "current page is : ${viewModel.sliderCurrentPage} and item count is : ${sliderAdapter.itemCount}"
+                    )
+                    binding.homePager.setCurrentItem(viewModel.sliderCurrentPage, true)
+                }
 
-    override fun onStart() {
-        super.onStart()
-        getData()
-        setupSlider()
+                viewModel.sliderCurrentPage = viewModel.sliderCurrentPage + 1
+                // check for last item
+                if (viewModel.sliderCurrentPage >= sliderAdapter.itemCount)
+                    viewModel.sliderCurrentPage = 0
+
+                handler.postDelayed(this, Constants.HOME_SLIDER_DELAY)
+            }
+        })
     }
 
     private fun setupAdapters() {
         sliderAdapter = SliderAdapter()
+
+        categoriesAdapter = CategoriesAdapter(CategoriesAdapter.OnClickListener { position, item ->
+            // TODO item click listener
+        })
         featuredAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
             // TODO item click listener
         })
         bestAdapter = HorizontalAdapter(HorizontalAdapter.OnClickListener { position, item ->
-            // TODO item click listener
-        })
-        categoriesAdapter = CategoriesAdapter(CategoriesAdapter.OnClickListener { position, item ->
             // TODO item click listener
         })
     }
@@ -131,6 +133,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
                 is Resource.Success -> {
                     sliderAdapter.submitList(it.data)
+                    setupSlider()
                 }
 
                 is Resource.Error -> {
